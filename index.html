@@ -102,24 +102,76 @@
       .stat{ border-right:none; border-bottom:1px dashed var(--border); padding-bottom:.5rem; margin-bottom:.5rem; }
       .stat:last-child{ border-bottom:0; }
     }
-    #particles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: -1;
-    }
-    .particle {
-      position: absolute;
-      width: 8px; height: 8px;
-      background: var(--c-542);
-      border-radius: 50%;
-      opacity: 0.6;
-      animation: rise 12s linear infinite;
-    }
-    @keyframes rise {
-      from { transform: translateY(100vh) scale(0.5); opacity: 0.2; }
-      to { transform: translateY(-10vh) scale(1); opacity: 0; }
-    }
+/* --- PARTICLES • Float (no bottom→top) --- */
+#particles{
+  position:absolute; inset:0; z-index:-1; overflow:hidden;
+  perspective:800px; pointer-events:none;
+}
+#particles .layer{ position:absolute; inset:0; transform-style:preserve-3d; }
+
+/* Register animatable custom props for smooth XY drift */
+@property --ox { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --oy { syntax: '<length>'; inherits: false; initial-value: 0px; }
+
+/* Particle */
+.p{
+  position:absolute; border-radius:50%;
+  width:8px; height:8px; opacity:.8; will-change: transform, opacity, filter;
+  /* glow */
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,.18) 60%, transparent 62%),
+    radial-gradient(circle at 70% 60%, var(--col,#6ea8fe), transparent 60%);
+  filter: drop-shadow(0 0 6px var(--col,#6ea8fe)) blur(var(--blur,0px));
+  /* base transform uses custom offsets so animations don't fight over transform */
+  transform: translate3d(calc(var(--x,0vw) + var(--ox,0px)),
+                         calc(var(--y,0vh) + var(--oy,0px)),
+                         var(--z,0px))
+             scale(var(--scale,1));
+  mix-blend-mode: screen;
+
+  /* animations: horizontal + vertical drift + twinkle */
+  animation:
+    floatX var(--ax,5s) ease-in-out infinite alternate,
+    floatY var(--ay,7s) ease-in-out infinite alternate,
+    flicker var(--tw,3.6s) ease-in-out infinite;
+  animation-delay: var(--delay,0s);
+}
+
+.p.diamond{ border-radius:10%; }
+
+/* Comet: left → right sweep (no vertical travel) */
+.comet{
+  position:absolute; height:2px; width:160px; opacity:0;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%,
+                                      var(--col,#9fb2d9) 40%,
+                                      rgba(255,255,255,0) 100%);
+  filter: drop-shadow(0 0 8px var(--col,#9fb2d9));
+  transform-origin:left center; will-change: transform, opacity;
+  animation: comet var(--cd,2.8s) ease-out forwards;
+}
+
+/* Keyframes */
+@keyframes floatX { from { --ox: calc(var(--dx) * -1px); } to { --ox: calc(var(--dx) * 1px); } }
+@keyframes floatY { from { --oy: calc(var(--dy) * -1px); } to { --oy: calc(var(--dy) * 1px); } }
+
+@keyframes flicker{
+  0%,100%{ opacity:.65; }
+  45%{ opacity:.95; }
+  70%{ opacity:.8; }
+}
+
+@keyframes comet{
+  0%   { opacity:0; transform: translate3d(var(--cx,-20vw), var(--cy,50vh), var(--cz,0)) }
+  10%  { opacity:.95; }
+  100% { opacity:0; transform: translate3d(calc(var(--cx,-20vw) + var(--travelX,140vw)),
+                                           var(--cy,50vh), var(--cz,0)) }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .p, .comet{ animation: none !important; opacity:.35; }
+}
+
 
   </style>
 </head>
@@ -155,7 +207,7 @@
   <!-- HERO -->
   <section class="hero container">
     <div class="row align-items-center g-4">
-      <div id="particles"></div>
+      <div id="particles" class="mb-4"></div>
 
       <div class="col-12 col-lg-6" data-aos="fade-up">
         <span class="badge rounded-pill mb-3 px-3 py-2" style="background: rgba(255,255,255,.12); border:1px solid var(--border); color: var(--ink);">
@@ -382,17 +434,96 @@
       offset: 60
     });
   </script>
-  <script>
-const container = document.getElementById("particles");
-for (let i=0; i<100; i++){
-  const p = document.createElement("div");
-  p.className = "particle";
-  p.style.left = Math.random()*100 + "vw";
-  p.style.animationDuration = (8 + Math.random()*8) + "s";
-  p.style.background = Math.random() > .5 ? "var(--c-542)" : "var(--c-544)";
-  container.appendChild(p);
-}
+<script>
+(() => {
+  const wrap = document.getElementById('particles');
+  const layers = [0,1,2].map(i => {
+    const d = document.createElement('div');
+    d.className = 'layer'; d.dataset.depth = i; wrap.appendChild(d); return d;
+  });
+
+  const cfg = {
+    counts: [48, 34, 18],    // far / mid / near
+    sizeBase: [3, 5, 7],
+    blur: [1.2, 0.8, 0.4],
+    driftX: [16, 24, 34],    // px range for X drift
+    driftY: [10, 18, 26],    // px range for Y drift
+    ax: [4.5, 5.5, 6.5],     // anim durations (X)
+    ay: [6.0, 7.5, 8.5],     // anim durations (Y)
+  };
+
+  const colors = ['var(--c-542)','var(--c-544)','rgba(255,255,255,.9)'];
+  const rand = (a,b)=> a + Math.random()*(b-a);
+  const pick = arr => arr[(Math.random()*arr.length)|0];
+
+  // spawn particles (random XY positions; no vertical rise)
+  layers.forEach((layer, i) => {
+    const count = cfg.counts[i];
+    for(let k=0; k<count; k++){
+      const p = document.createElement('div');
+      p.className = 'p' + (Math.random() < 0.16 ? ' diamond' : '');
+      const size = rand(cfg.sizeBase[i], cfg.sizeBase[i]+10);
+      p.style.width = size+'px'; p.style.height = size+'px';
+      p.style.setProperty('--x', rand(0,100).toFixed(2) + 'vw');
+      p.style.setProperty('--y', rand(5,85).toFixed(2) + 'vh'); // stay within hero
+      p.style.setProperty('--z', (i===0?-80:i===1?-20:0)+'px');
+      p.style.setProperty('--scale', (0.7 + Math.random()*0.9).toFixed(2));
+      p.style.setProperty('--blur', cfg.blur[i]);
+      p.style.setProperty('--col', pick(colors));
+
+      // drift magnitudes & speeds
+      p.style.setProperty('--dx', (rand(cfg.driftX[i]*0.6, cfg.driftX[i])).toFixed(1));
+      p.style.setProperty('--dy', (rand(cfg.driftY[i]*0.6, cfg.driftY[i])).toFixed(1));
+      p.style.setProperty('--ax', (rand(cfg.ax[i]-1, cfg.ax[i]+1)).toFixed(2)+'s');
+      p.style.setProperty('--ay', (rand(cfg.ay[i]-1, cfg.ay[i]+1)).toFixed(2)+'s');
+      p.style.setProperty('--tw', (rand(3.0, 4.3)).toFixed(2)+'s');
+      p.style.setProperty('--delay', (-rand(0, 6)).toFixed(2)+'s');
+
+      layer.appendChild(p);
+    }
+  });
+
+  // left→right comets (no upward motion)
+  function spawnComet(){
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const layer = pick(layers);
+    const c = document.createElement('div');
+    c.className = 'comet';
+    c.style.setProperty('--cx', (-20 + Math.random()*-10) + 'vw');
+    c.style.setProperty('--cy', (15 + Math.random()*70).toFixed(2) + 'vh');
+    c.style.setProperty('--cz', (layer.dataset.depth==0?-60:layer.dataset.depth==1?-20:0)+'px');
+    c.style.setProperty('--travelX', (110 + Math.random()*40) + 'vw');
+    c.style.setProperty('--cd', (2.2 + Math.random()*1.4).toFixed(2) + 's');
+    c.style.setProperty('--col', pick(colors));
+    layer.appendChild(c);
+    setTimeout(()=> c.remove(), 3600);
+  }
+  setInterval(()=> { if (Math.random()<0.55) spawnComet(); }, 2600);
+
+  // mouse/touch parallax (kept subtle)
+  let tx=0, ty=0, px=0, py=0;
+  function onMove(e){
+    const r = wrap.getBoundingClientRect();
+    const x = (e.clientX ?? e.touches?.[0]?.clientX ?? r.width/2) - r.width/2;
+    const y = (e.clientY ?? e.touches?.[0]?.clientY ?? r.height/2) - r.height/2;
+    tx = x / r.width; ty = y / r.height;
+  }
+  window.addEventListener('mousemove', onMove, {passive:true});
+  window.addEventListener('touchmove', onMove, {passive:true});
+
+  function raf(){
+    px += (tx - px)*0.06; py += (ty - py)*0.06;
+    layers.forEach((layer, i) => {
+      const depth = i+1;
+      layer.style.transform =
+        `translate3d(${px*depth*14}px, ${py*depth*10}px, ${-depth*20}px)`;
+    });
+    requestAnimationFrame(raf);
+  }
+  raf();
+})();
 </script>
+
 
 </body>
 </html>
