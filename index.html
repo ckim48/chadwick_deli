@@ -280,6 +280,15 @@ body{
 @media (prefers-reduced-motion: reduce){
   .photo-stack .p1 .slide{ transition:none; }
 }
+/* Tighten hero on phones */
+@media (max-width: 576px){
+  .hero.alt-hero{
+    min-height: auto; /* don't force full screen on mobile */
+    padding: calc(var(--nav-h) + 1.25rem) 0 1rem; /* shorter top/bottom */
+  }
+  /* trim the space before the stats on mobile */
+  .hero.alt-hero .row.mt-4{ margin-top: .75rem !important; }
+}
 
 /* =========================
    EYEBROW (reused)
