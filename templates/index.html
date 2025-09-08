@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deli Express | Chadwick International School</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="static/styles.css">
+  <!-- AOS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#e9eefb; --ink-dim:#cfd7ff; --border: rgba(255,255,255,.12);
+      --glass1: rgba(23,32,57,.60); --glass2: rgba(17,26,46,.55);
+      --c-539:#0b3a63; --c-542:#6ea8fe; --c-544:#9fb2d9;
+      --navy:#0b1220; --nav2:#111a2e;
+    }
+
+    html { scroll-behavior: smooth; }
+    body{
+      min-height:100vh; color:var(--ink);
+      background:
+        radial-gradient(1200px 900px at 10% 10%, rgba(255,255,255,.08), transparent 60%),
+        radial-gradient(1200px 900px at 90% 20%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(180deg, var(--navy) 0%, var(--nav2) 100%);
+      overflow-x:hidden;
+    }
+    .container{ max-width:1120px; }
+
+    .glass-xl{
+      background:linear-gradient(180deg,var(--glass1),var(--glass2));
+      border:1px solid var(--border);
+      border-radius:1.25rem;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      backdrop-filter:saturate(120%) blur(8px);
+    }
+
+    /* Navbar */
+    .app-navbar{
+      backdrop-filter:saturate(120%) blur(8px);
+      background:linear-gradient(180deg, rgba(15,23,42,.65), rgba(10,15,28,.45));
+      border-bottom:1px solid var(--border);
+    }
+    .nav-link{ color:var(--ink-dim); }
+    .nav-link:hover{ color:var(--ink); }
+
+    /* Buttons */
+    .btn-brand{ background:var(--c-539); color:#fff; border:0; }
+    .btn-brand:hover{ filter:brightness(1.06); color:#fff; }
+    .btn-ghost{ background:transparent; border:1px solid var(--border); color:var(--ink); }
+    .btn-ghost:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.25); }
+    .badge-brand{ background:var(--c-542); color:#0b1220; padding: 20px 10px; }
+
+    /* Hero */
+    .hero{ padding:8.5rem 0 5rem; position:relative; }
+    .hero h1{ letter-spacing:.2px; }
+    .hero-mark{
+      text-decoration:underline;
+      text-decoration-color:var(--c-542);
+      text-underline-offset:.25em;
+      text-decoration-thickness:3px;
+    }
+    .device{ aspect-ratio:16/10; border-radius:1rem; border:1px solid var(--border); background:rgba(255,255,255,.04); }
+
+    /* Feature cards */
+    .feature-icon{ width:44px; height:44px; display:grid; place-items:center; border-radius:.75rem; background:rgba(255,255,255,.08); border:1px solid var(--border); }
+    .card-lift{ transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .card-lift:hover{ transform:translateY(-4px); box-shadow:0 12px 32px rgba(0,0,0,.28); border-color:rgba(255,255,255,.22) !important; }
+
+    /* Stats */
+    .stat{ border-right:1px dashed var(--border); }
+    .stat:last-child{ border-right:none; }
+
+    /* Steps */
+    .steps .step-index{ width:36px; height:36px; border-radius:50%; display:inline-grid; place-items:center; background:rgba(255,255,255,.08); border:1px solid var(--border); }
+
+    /* Accordion dark polish */
+    .accordion-button{ background:transparent !important; color:var(--ink) !important; box-shadow:none !important; }
+    .accordion-button:not(.collapsed){ background:rgba(255,255,255,.06) !important; color:var(--ink) !important; }
+    .accordion-item{ background:transparent; border-color:var(--border); }
+    .accordion-body{ color:var(--ink-dim); }
+    .accordion-button::after{ filter: invert(1) opacity(.8); }
+
+    /* Footer */
+    .site-footer{
+/*      margin-top:2rem;
+      border-top:1px solid var(--border);*/
+      background:linear-gradient(180deg, rgba(11,18,32,.7), rgba(17,26,46,.55));
+      backdrop-filter:saturate(120%) blur(8px);
+    }
+    .footer-top .link{ color:var(--ink-dim); text-decoration:none; }
+    .footer-top .link:hover{ color:var(--ink); }
+    .footer-mini{
+/*      border-top:1px solid var(--border);*/
+      color:var(--ink-dim);
+    }
+
+    @media (max-width:576px){
+      .hero{ padding:6.5rem 0 3.5rem; }
+      .stat{ border-right:none; border-bottom:1px dashed var(--border); padding-bottom:.5rem; margin-bottom:.5rem; }
+      .stat:last-child{ border-bottom:0; }
+    }
+/* --- PARTICLES 2.0 --- */
+#particles{
+  position:absolute; inset:0; z-index:-1; overflow:hidden;
+  perspective: 800px;
+  pointer-events:none;
+}
+
+/* three depth layers for parallax */
+#particles .layer{ position:absolute; inset:0; transform-style:preserve-3d; }
+
+/* base particle */
+.p {
+  position:absolute; border-radius:50%;
+  will-change: transform, opacity;
+  opacity:.75;
+  /* soft glow with gradient core */
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,.15) 55%, transparent 60%),
+    radial-gradient(circle at 70% 60%, var(--col, #6ea8fe), transparent 60%);
+  filter: drop-shadow(0 0 6px var(--col, #6ea8fe)) blur(var(--blur, 0px));
+  animation:
+    rise var(--rise, 10s) linear infinite,
+    sway var(--sway, 4s) ease-in-out infinite alternate,
+    flicker var(--flicker, 3.4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  transform: translate3d(0,0,var(--z,0px)) scale(var(--scale,1));
+  mix-blend-mode: screen;
+}
+
+/* diamond variant for variety */
+.p.diamond{ border-radius:10%; transform: translate3d(0,0,var(--z,0px)) rotate(45deg) scale(var(--scale,1)); }
+
+/* comet (streak) */
+.comet{
+  position:absolute; width: 140px; height:2px; opacity:.0;
+  background: linear-gradient(90deg, rgba(255,255,255,.0) 0%, var(--col, #9fb2d9) 40%, rgba(255,255,255,.0) 100%);
+  filter: drop-shadow(0 0 6px var(--col, #9fb2d9));
+  transform-origin:left center;
+  will-change: transform, opacity;
+  animation: comet var(--cometDur, 2.6s) ease-out forwards;
+}
+
+/* keyframes */
+@keyframes rise{
+  from{ transform: translate3d(var(--x,0), 100vh, var(--z,0)) scale(var(--scale,1)); opacity: .0; }
+  to  { transform: translate3d(var(--x,0), -12vh, var(--z,0)) scale(calc(var(--scale,1) * 1.05)); opacity:.85; }
+}
+
+@keyframes sway{
+  from{ transform: translate3d(calc(var(--x,0) - var(--dx,0px)), 0, var(--z,0)) scale(var(--scale,1)); }
+  to  { transform: translate3d(calc(var(--x,0) + var(--dx,0px)), 0, var(--z,0)) scale(var(--scale,1)); }
+}
+
+@keyframes flicker{
+  0%,100%{ opacity:.65; }
+  50%{ opacity: .95; }
+  60%{ opacity: .8; }
+}
+
+@keyframes comet{
+  0%  { opacity:0; transform: translate3d(var(--cx,0), 110vh, var(--cz,0)) rotate(var(--rot, -12deg)); }
+  10% { opacity:.95; }
+  100%{ opacity:0; transform: translate3d(calc(var(--cx,0) + var(--travelX, 30vw)),
+                                          -18vh, var(--cz,0)) rotate(var(--rot, -12deg)); }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .p, .comet{ animation: none !important; opacity:.35; }
+}
+.phone {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 19.5;
+  border-radius: 2rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow: 0 12px 28px rgba(0,0,0,.28) inset, 0 10px 28px rgba(0,0,0,.22);
+  overflow: hidden;
+}
+.phone::before{
+  /* notch */
+  content:"";
+  position:absolute; top:.35rem; left:50%; transform:translateX(-50%);
+  width:40%; height:.55rem; border-radius:0 0 .6rem .6rem;
+  background:rgba(0,0,0,.45);
+  filter: blur(.2px);
+}
+.phone .screen{
+  position:absolute; inset:.75rem; border-radius:1.2rem; overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+  background: #000;
+}
+.phone .screen img{
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+
+/* Walkthrough section polish */
+.walkthrough .step-eyebrow{
+  display:inline-block; font-size:.8rem; letter-spacing:.06em;
+  color:var(--ink-dim); text-transform:uppercase;
+  border:1px solid var(--border); padding:.25rem .5rem; border-radius:999px;
+}
+.walkthrough .bullet{
+  display:flex; gap:.6rem; align-items:flex-start;
+}
+.walkthrough .bullet .dot{
+  width:.5rem; height:.5rem; border-radius:50%;
+  background: var(--c-542);
+  margin-top:.45rem;
+}
+.walkthrough .cardish{
+  background: linear-gradient(180deg, var(--glass1), var(--glass2));
+  border:1px solid var(--border); border-radius:1.25rem;
+  padding:1.2rem;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg fixed-top app-navbar">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="home.html" aria-label="Deli Express home">
+        <img src="static/images/logo_nav.png" alt="Deli Express" style="height:32px"/>
+        <span class="fw-semibold">Deli Express</span>
+      </a>
+      <button class="navbar-toggler border-0 px-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainNav" aria-controls="mainNav" aria-label="Open menu">
+        <i class="bi bi-list" style="font-size:1.5rem;"></i>
+      </button>
+
+      <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="mainNav" aria-labelledby="mainNavLabel">
+        <div class="offcanvas-header border-bottom border-light-subtle">
+          <h5 class="offcanvas-title" id="mainNavLabel">Menu</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-lg-flex align-items-center">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+            <li class="nav-item"><a class="nav-link" href="#how">How it works</a></li>
+            <li class="nav-item d-lg-none my-2"><a class="btn btn-brand w-100" href="/order/start"><i class="bi bi-bag-check me-1"></i> Start Order</a></li>
+          </ul>
+          <a class="btn btn-brand ms-lg-3 d-none d-lg-inline-flex" href="/order/start"><i class="bi bi-bag-check me-1"></i> Start Order</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero container">
+    <div class="row align-items-center g-4">
+      <div id="particles"></div>
+
+      <div class="col-12 col-lg-6" data-aos="fade-up">
+        <span class="badge rounded-pill mb-3 px-3 py-2" style="background: rgba(255,255,255,.12); border:1px solid var(--border); color: var(--ink);">
+          <i class="bi bi-lightning-charge"></i> Express ordering for busy school days
+        </span>
+        <h1 class="display-5 fw-bold mb-3" style="font-size: 2.2rem !important;">Fresh. Fast. Friendly.<br/>Order ahead with <span class="hero-mark">Deli Express</span></h1>
+        <p class="lead text-white-50 mb-4" style="font-size: 1.1rem !important;">Skip the line and get healthier options without the wait. Designed for Chadwick International School.</p>
+        <!-- FEWER BUTTONS: primary + one secondary -->
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="/order/start" class="btn btn-brand"><i class="bi bi-bag-check me-1"></i>Start Order</a>
+        </div>
+<!--         <div class="d-flex gap-4 mt-4 small text-white-50">
+          <div><i class="bi bi-shield-check me-1"></i>School login ready</div>
+          <div><i class="bi bi-cash-coin me-1"></i>Rewards & surveys</div>
+          <div><i class="bi bi-phone me-1"></i>PWA friendly</div>
+        </div> -->
+      </div>
+      <div class="col-12 col-lg-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="glass-xl p-3 p-md-4 card-lift">
+          <div class="device d-flex align-items-center justify-content-center">
+            <div class="text-center">
+              <img src="static/images/logo_nav.png" alt="Deli Express" class="mb-3" style="max-height:64px"/>
+              <div class="text-white-50">App preview</div>
+            </div>
+          </div>
+          <div class="row text-center mt-3 g-3">
+            <div class="col stat">
+              <div class="h4 mb-0">~1.2m</div>
+              <div class="text-white-50 small">/ Express order</div>
+            </div>
+            <div class="col stat">
+              <div class="h4 mb-0">10k+</div>
+              <div class="text-white-50 small">Orders served</div>
+            </div>
+            <div class="col">
+              <div class="h4 mb-0">98%</div>
+              <div class="text-white-50 small">On-time pickup</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST / ANNOUNCE STRIP -->
+  <section class="container mb-4 mt-5" data-aos="fade">
+    <div class="glass-xl p-3 p-md-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+      <div class="d-flex align-items-center gap-2">
+
+        <span class="fw-semibold">Express lane</span>
+        <span class="text-white-50">— Earn points for priority pickup for pre-orders before lunch rush.</span>
+      </div>
+      <a href="/order/start" class="btn btn-sm btn-brand"><i class="bi bi-lightning-charge me-1"></i>Try Express</a>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="container py-4 py-md-5">
+    <div class="row g-4">
+      <div class="col-12 col-lg-4" data-aos="zoom-in" data-aos-delay="0">
+        <div class="glass-xl p-4 h-100 border card-lift">
+          <div class="feature-icon mb-3"><i class="bi bi-speedometer2"></i></div>
+          <h3 class="h5 mb-2">Fast ordering</h3>
+          <p class="text-white-50 mb-0">Place orders in seconds and pick up at the dedicated Express counter.</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4" data-aos="zoom-in" data-aos-delay="75">
+        <div class="glass-xl p-4 h-100 border card-lift">
+          <div class="feature-icon mb-3"><i class="bi bi-emoji-laughing"></i></div>
+          <h3 class="h5 mb-2">Personalized picks</h3>
+          <p class="text-white-50 mb-0">Recommendations adapt to your tastes and schedule.</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4" data-aos="zoom-in" data-aos-delay="150">
+        <div class="glass-xl p-4 h-100 border card-lift">
+          <div class="feature-icon mb-3"><i class="bi bi-award"></i></div>
+          <h3 class="h5 mb-2">Earn rewards</h3>
+          <p class="text-white-50 mb-0">Complete daily surveys to collect points and perks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="container py-4 py-md-5">
+    <div class="row g-4 align-items-center">
+      <div class="col-12 col-lg-6" data-aos="fade-right">
+        <div class="glass-xl p-4 p-md-5 steps">
+          <h2 class="h4 mb-3">How it works</h2>
+          <div class="d-flex gap-3 mb-3">
+            <span class="step-index">1</span>
+            <div>
+              <div class="fw-semibold">Choose your meal</div>
+              <div class="text-white-50 small">Browse the daily menu and personalized recommendations.</div>
+            </div>
+          </div>
+          <div class="d-flex gap-3 mb-3">
+            <span class="step-index">2</span>
+            <div>
+              <div class="fw-semibold">Pick a timeslot</div>
+              <div class="text-white-50 small">Select Regular or Express based on your schedule.</div>
+            </div>
+          </div>
+          <div class="d-flex gap-3">
+            <span class="step-index">3</span>
+            <div>
+              <div class="fw-semibold">Grab & go</div>
+              <div class="text-white-50 small">Head to the counter—your order is ready when you arrive.</div>
+            </div>
+          </div>
+          <div class="mt-4 d-flex gap-2 flex-wrap">
+            <a href="/order/start" class="btn btn-brand"><i class="bi bi-bag me-1"></i>Start Order</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6" data-aos="fade-left">
+        <div class="glass-xl p-3 p-md-4 card-lift">
+          <div class="device d-flex align-items-center justify-content-center text-white-50">
+            Queue &amp; ETA preview
+          </div>
+          <div class="row mt-3 g-3 small text-white-50">
+            <div class="col-6">
+              <div class="p-3 rounded-3" style="border:1px solid var(--border); background:rgba(255,255,255,.04)">
+                <div class="fw-semibold">Regular</div>
+                <div>~2.5 min/order</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-3 rounded-3" style="border:1px solid var(--border); background:rgba(255,255,255,.04)">
+                <div class="fw-semibold">Express</div>
+                <div>~1.2 min/order</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="container py-4 py-md-5" data-aos="fade-up">
+    <div class="glass-xl p-4 p-md-5">
+      <div class="row g-4 align-items-center">
+        <div class="col-12 col-lg-8">
+          <figure class="mb-0">
+            <blockquote class="blockquote mb-2">“Deli Express helped our students pick up lunch faster and focus on classes. The Express lane before noon is a game changer.”</blockquote>
+            <figcaption class="blockquote-footer text-white-50 mb-0 mt-3">Operations Team • Chadwick International School</figcaption>
+          </figure>
+        </div>
+        <div class="col-12 col-lg-4 text-lg-end">
+          <a href="/order/start" class="btn btn-brand"><i class="bi bi-lightning-charge me-1"></i>Get Started</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ + CTA -->
+  <section class="container pb-5">
+    <div class="row g-4">
+      <div class="col-12 col-lg-6" data-aos="fade-up">
+        <div class="glass-xl p-4 h-100">
+          <h3 class="h5 mb-3">FAQ</h3>
+          <div class="accordion accordion-flush" id="faq">
+            <div class="accordion-item bg-transparent text-white">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed bg-transparent text-white" type="button" data-bs-toggle="collapse" data-bs-target="#f1">Do I need an account?</button>
+              </h2>
+              <div id="f1" class="accordion-collapse collapse" data-bs-parent="#faq">
+                <div class="accordion-body text-white-50">Use your school login to access ordering, history, and rewards.</div>
+              </div>
+            </div>
+            <div class="accordion-item bg-transparent text-white">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed bg-transparent text-white" type="button" data-bs-toggle="collapse" data-bs-target="#f2">What is Express?</button>
+              </h2>
+              <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faq">
+                <div class="accordion-body text-white-50">Express orders are prioritized with a separate pickup line for minimum wait times.</div>
+              </div>
+            </div>
+            <div class="accordion-item bg-transparent text-white">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed bg-transparent text-white" type="button" data-bs-toggle="collapse" data-bs-target="#f3">How do points work?</button>
+              </h2>
+              <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faq">
+                <div class="accordion-body text-white-50">Complete short surveys and collect points you can redeem for perks.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="glass-xl p-4 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <h3 class="h5 mb-2">Ready to order?</h3>
+            <p class="text-white-50 mb-0">Jump in now and pick up at your perfect time. No app install required.</p>
+          </div>
+          <div class="d-flex gap-2 mt-3">
+            <a href="/order/start" class="btn btn-brand w-100">Start Order</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPROVED FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-mini py-3">
+      <div class="container d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <div>© <span id="y"></span> Deli Express • Chadwick International School</div>
+
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- AOS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    AOS.init({
+      once: true,
+      duration: 650,
+      easing: 'ease-out-quart',
+      offset: 60
+    });
+  </script>
+<script>
+(() => {
+  const wrap = document.getElementById('particles');
+  // create 3 parallax layers
+  const layers = [0,1,2].map(i => {
+    const d = document.createElement('div');
+    d.className = 'layer';
+    d.dataset.depth = i; // 0 = far, 2 = near
+    wrap.appendChild(d);
+    return d;
+  });
+
+  const cfg = {
+    counts: [50, 35, 20],     // far / mid / near particle counts
+    sizes : [3, 5, 7],        // base size per layer
+    speed : [12, 9, 7],       // rise duration baseline
+    sway  : [5, 4, 3],        // sway baseline
+    blur  : [1.2, 0.8, 0.4],  // blur per layer
+  };
+
+  const colors = ['var(--c-542)', 'var(--c-544)', 'rgba(255,255,255,.85)'];
+
+  function rand(a,b){ return a + Math.random()*(b-a); }
+  function pick(arr){ return arr[(Math.random()*arr.length)|0]; }
+
+  // spawn particles
+  layers.forEach((layer, idx) => {
+    const count = cfg.counts[idx];
+    for(let i=0;i<count;i++){
+      const el = document.createElement('div');
+      el.className = 'p' + (Math.random() < 0.18 ? ' diamond' : '');
+      const size = rand(cfg.sizes[idx], cfg.sizes[idx] + 10);
+      const xvw = rand(0,100).toFixed(2) + 'vw';
+      const dx = rand(8, 42) * (Math.random() < .5 ? -1 : 1);
+      el.style.width  = size+'px';
+      el.style.height = size+'px';
+      el.style.setProperty('--x', xvw);
+      el.style.setProperty('--dx', dx+'px');
+      el.style.setProperty('--scale', (0.6 + Math.random()*1.0).toFixed(2));
+      el.style.setProperty('--rise', (rand(cfg.speed[idx]-2, cfg.speed[idx]+4)).toFixed(2)+'s');
+      el.style.setProperty('--sway', (rand(cfg.sway[idx]-1, cfg.sway[idx]+2)).toFixed(2)+'s');
+      el.style.setProperty('--flicker', (rand(2.5, 4.2)).toFixed(2)+'s');
+      el.style.setProperty('--delay', (-rand(0, el.style.getPropertyValue('--rise') ? parseFloat(el.style.getPropertyValue('--rise')) : 10)).toFixed(2)+'s');
+      el.style.setProperty('--z', (idx === 0 ? -80 : idx === 1 ? -20 : 0)+'px');
+      el.style.setProperty('--blur', cfg.blur[idx]);
+      el.style.setProperty('--col', pick(colors));
+      layer.appendChild(el);
+    }
+  });
+
+  // occasional comets
+  function spawnComet(){
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const layer = pick(layers);
+    const c = document.createElement('div');
+    c.className = 'comet';
+    const startX = rand(-15, 15) + 'vw';
+    const rot = rand(-18, -6) + 'deg';
+    const travel = rand(40, 75) + 'vw';
+    c.style.setProperty('--cx', startX);
+    c.style.setProperty('--cz', (layer.dataset.depth == 0 ? -60 : layer.dataset.depth == 1 ? -20 : 0)+'px');
+    c.style.setProperty('--rot', rot);
+    c.style.setProperty('--travelX', travel);
+    c.style.setProperty('--cometDur', rand(2.2, 3.4)+'s');
+    c.style.setProperty('--col', pick(colors));
+    layer.appendChild(c);
+    // remove after animation
+    setTimeout(()=> c.remove(), 3800);
+  }
+  // fire comets at random intervals
+  setInterval(() => {
+    if (Math.random() < 0.6) spawnComet();
+  }, 2600);
+
+  // mouse / tilt parallax
+  const bounds = wrap.getBoundingClientRect();
+  let targetX = 0, targetY = 0, px = 0, py = 0;
+
+  function onMove(e){
+    const x = (e.clientX ?? (e.touches?.[0]?.clientX || bounds.width/2)) - bounds.width/2;
+    const y = (e.clientY ?? (e.touches?.[0]?.clientY || bounds.height/2)) - bounds.height/2;
+    targetX = x / bounds.width;
+    targetY = y / bounds.height;
+  }
+  window.addEventListener('mousemove', onMove, {passive:true});
+  window.addEventListener('touchmove', onMove, {passive:true});
+
+  // smooth follow + layer transforms
+  function raf(){
+    // ease
+    px += (targetX - px) * 0.06;
+    py += (targetY - py) * 0.06;
+    // apply per-layer offset
+    layers.forEach((layer, i) => {
+      const depth = (i+1); // 1..3
+      const tx = px * depth * 14;   // horizontal parallax
+      const ty = py * depth * 10;   // vertical parallax
+      const tz = -depth * 20;       // subtle Z push
+      layer.style.transform = `translate3d(${tx}px, ${ty}px, ${tz}px)`;
+    });
+    requestAnimationFrame(raf);
+  }
+  raf();
+})();
+</script>
+
+
+</body>
+</html>
