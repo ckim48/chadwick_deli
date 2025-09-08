@@ -133,9 +133,14 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
 .hero.alt-hero .lead{
   font-size: clamp(1rem, 3.8vw, 1.1rem) !important;
 }
-
+.gone{
+  display: block;
+}
 /* center the badge + tighten vertical rhythm on phones */
 @media (max-width: 576px){
+  .gone{
+    display: none;
+  }
   .hero.alt-hero{ padding-bottom: 0; }
   .hero.alt-hero .badge{ margin-inline: auto; }
   .hero.alt-hero .d-flex.flex-wrap{ gap: .5rem .6rem; } /* nicer wrap */
@@ -644,7 +649,7 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
       </div>
 
       <!-- RIGHT: stacked phone mock-ups with your GIFs -->
-      <div class="col-12 col-lg-6 px-3 d-none d-md-block" data-aos="fade-left" data-aos-delay="75" >
+      <div class="col-12 col-lg-6 px-3 d-none d-md-block gone" data-aos="fade-left" data-aos-delay="75" >
         <div class="stacked-phones">
           <figure class="phone-frame p1" aria-label="App browsing"> 
             <div class="screen">
