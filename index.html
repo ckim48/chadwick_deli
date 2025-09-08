@@ -36,13 +36,15 @@
   --hero-base-bot: rgba(17,26,46,.92);
 
   /* layout */
-  --nav-h: 64px;        /* if you measure navbar height in JS, update this */
+  --nav-h: 64px;
 }
 
 html{ 
   scroll-behavior: smooth; 
   background-color: var(--navy);
   scroll-padding-top: calc(var(--nav-h) + 8px);
+  max-width: 100%;
+  overflow-x: clip;           /* prevent horizontal scroll (incl. iOS) */
 }
 body{
   min-height:100vh; 
@@ -50,9 +52,9 @@ body{
   max-width: 100%;
   color:var(--ink);
   background: var(--navy);
-  overflow-x:hidden;
+  overflow-x: clip;           /* prevent horizontal scroll (incl. iOS) */
+  overscroll-behavior-x: none;
 }
-
 
 .container{ max-width:1120px; }
 
@@ -68,11 +70,12 @@ body{
 /* =========================
    NAVBAR & BUTTONS
 ========================= */
-
 .app-navbar{
   backdrop-filter:saturate(120%) blur(8px);
   background:linear-gradient(180deg, rgba(15,23,42,.65), rgba(10,15,28,.45));
   border-bottom:1px solid var(--border);
+  z-index: 1200;
+  overflow-x: clip;           /* offcanvas won't push page width */
 }
 .nav-link{ color:var(--ink-dim); }
 .nav-link:hover{ color:var(--ink); }
@@ -81,36 +84,32 @@ body{
 .btn-brand:hover{ background:#3D50A6; color:#fff; }
 .btn-ghost{ background:transparent; border:1px solid var(--border); color:var(--ink); }
 .btn-ghost:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.25); }
-/* 1) Stop hidden offcanvas from causing horizontal scroll */
-.app-navbar{ overflow-x: clip; } /* clip > hidden avoids compositing glitches */
 
-/* 2) Make the offcanvas size responsive and scroll inside itself */
+/* Offcanvas (responsive, no forced height) */
 .offcanvas{
-  /* never wider than the viewport; tune 320px if you want a wider panel */
   --bs-offcanvas-width: min(320px, 92vw);
-  height: auto;                 /* remove hard 350px */
-  max-height: 85dvh;            /* fit on small phones */
-  overflow-y: auto;             /* scroll contents, not the page */
+  z-index: 1300;
+  height: 350px;
+  max-height: 85dvh;
+  overflow-y: auto;
 }
+.offcanvas-backdrop{ z-index: 1290; }
 
-/* 3) Ensure the page content never sits under the fixed navbar */
-:root{ --nav-h: 64px; }                  /* your measured nav height */
-.hero.alt-hero{ margin-top: 0; padding-top: var(--nav-h); }  /* replace the 55px margin */
-html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have this */
-
-/* === HERO (alt, no animation, stacked phones) === */
+/* =========================
+   HERO (alt, no animation, stacked phones)
+========================= */
 .hero.alt-hero{
-  margin-top: 55px;
   position: relative;
   isolation: isolate;
   box-sizing: border-box;
-  min-height: calc(100vh - var(--nav-h));
-  padding: 2.5rem 0 3.5rem;
+  min-height: 100vh;
+/*  min-height: calc(100vh);*/
+  padding: calc(var(--nav-h) + 2.5rem) 0 3.5rem; /* start below fixed navbar */
   background: linear-gradient(180deg, var(--hero-base-top), var(--hero-base-bot));
 }
-@supports (height: 100dvh){
+/*@supports (height: 100dvh){
   .hero.alt-hero{ min-height: calc(100dvh - var(--nav-h)); }
-}
+}*/
 /* kill previous animated layers */
 .hero.alt-hero::before,
 .hero.alt-hero::after{ content: none !important; }
@@ -124,35 +123,30 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
   text-decoration-thickness:3px;
 }
 
-/* === HERO mobile alignment & type scale === */
+/* HERO mobile alignment & type scale */
 .hero.alt-hero h1{
-  /* override inline size on small screens with a fluid clamp */
   font-size: clamp(1.7rem, 6vw, 2.2rem) !important;
   line-height: 1.15;
 }
 .hero.alt-hero .lead{
   font-size: clamp(1rem, 3.8vw, 1.1rem) !important;
 }
-.gone{
-  display: block;
-}
+
+/* toggle helper */
+.gone{ display: block; }
+
 /* center the badge + tighten vertical rhythm on phones */
 @media (max-width: 576px){
-  .gone{
-    display: none;
-  }
+  .gone{ display: none; }
   .hero.alt-hero{ padding-bottom: 0; }
   .hero.alt-hero .badge{ margin-inline: auto; }
-  .hero.alt-hero .d-flex.flex-wrap{ gap: .5rem .6rem; } /* nicer wrap */
+  .hero.alt-hero .d-flex.flex-wrap{ gap: .5rem .6rem; }
   .hero.alt-hero .stat .h4{ line-height: 1.1; }
-
-  /* ensure phone stack is nicely spaced & centered */
-  .stacked-phones{ margin-top: 1rem; }
-  .phone-frame{ width: 90%; }
 }
 
-
-/* stacked phones */
+/* =========================
+   STACKED PHONES
+========================= */
 .stacked-phones{
   position: relative;
   height: 520px;
@@ -161,9 +155,10 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
   .stacked-phones{ height: 460px; }
 }
 @media (max-width: 576px){
-  .stacked-phones{ height: auto; }
+  .stacked-phones{ height: auto; overflow-x: clip; } /* avoid subpixel overflow */
 }
-/* === HERO phone stack: entry spread on load === */
+
+/* entry spread on load */
 .stacked-phones .phone-frame{
   will-change: transform, opacity;
   transition: transform 650ms cubic-bezier(.2,.7,.2,1), opacity 450ms ease;
@@ -175,7 +170,7 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
   transform: translateY(22px) scale(.92) rotate(0deg);
 }
 
-/* phone frame (standalone, not tied to #walkthrough) */
+/* phone frame (standalone) */
 .phone-frame{
   position: absolute;
   width: 240px;
@@ -202,38 +197,9 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
 }
 
 /* positions */
-.phone-frame.p1{
-  left:50%; top:2%; transform: translateX(-50%) rotate(-3deg);
-  z-index:3;
-}
-.phone-frame.p2{
-  left:6%; bottom:0%; transform: rotate(-11deg);
-  z-index:2;
-}
-.phone-frame.p3{
-  right:6%; top:10%; transform: rotate(8deg);
-  z-index:1;
-}
-
-/* hover polish (desktop) */
-/*@media (hover:hover){
-  .phone-frame:hover{
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 18px 48px rgba(0,0,0,.40), 0 12px 28px rgba(0,0,0,.28) inset;
-    border-color: rgba(255,255,255,.22);
-  }
-}
-
-@media (max-width: 576px){
-  .phone-frame{
-    position: relative;
-    width: 88%;
-    margin: 0 auto 1rem;
-    left:auto; right:auto; top:auto; bottom:auto;
-    transform:none !important;
-  }
-}
-*/
+.phone-frame.p1{ left:50%; top:2%; transform: translateX(-50%) rotate(-3deg); z-index:3; }
+.phone-frame.p2{ left:6%; bottom:0%; transform: rotate(-11deg); z-index:2; }
+.phone-frame.p3{ right:6%; top:3%; transform: rotate(12deg); z-index:1; }
 
 /* =========================
    UTILITIES / CARDS / STATS
@@ -406,12 +372,11 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
 
 /* =========================
    DELI PHOTOS (Chadwick gallery)
-   - equal heights per row
 ========================= */
 #deli-photos{ 
-  --row1-h-lg: 260px;   /* desktop: first row (t1,t2) */
-  --row2-h-lg: 200px;   /* desktop: second row (t3,t4,t5) */
-  --row-h-sm: 180px;    /* mobile/tablet: all tiles */
+  --row1-h-lg: 260px;
+  --row2-h-lg: 200px;
+  --row-h-sm: 180px;
   background-color: var(--nav2);
 }
 #deli-photos .lede{ color: var(--ink-dim); max-width: 60ch; }
@@ -438,16 +403,14 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
 /* desktop */
 @media (min-width: 992px){
   #deli-photos .grid{ grid-template-columns: repeat(12, 1fr); }
-  /* row 1: two equal tiles */
   #deli-photos .t1, 
   #deli-photos .t2{ grid-column: span 6; height: var(--row1-h-lg); }
-  /* row 2: three equal tiles */
   #deli-photos .t3, 
   #deli-photos .t4, 
   #deli-photos .t5{ grid-column: span 4; height: var(--row2-h-lg); }
 }
 
-/* modal image (if you add the modal markup) */
+/* modal image */
 #deli-photos .modal-content{ background: transparent; border: 0; box-shadow: none; }
 #deli-photos .modal-body img{
   width:100%; height:auto; border:1px solid var(--border); border-radius:1rem; display:block; margin:auto;
@@ -466,7 +429,7 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
 #schools a:hover .logo{ filter: none; transform: translateY(-2px); }
 #schools .logos-note{ color: var(--ink-dim); }
 
-/* larger variants used in your layout */
+/* larger variants */
 #schools .logo.big{ height: 250px; }
 #schools .logo.verybig{ height: 400px; }
 @media (min-width: 992px){
@@ -490,11 +453,8 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
   .stat{ border-right:none; border-bottom:1px dashed var(--border); padding-bottom:.5rem; margin-bottom:.5rem; }
   .stat:last-child{ border-bottom:0; }
 }
-/* Make sure the mobile menu and its backdrop are on top */
-.app-navbar{ z-index: 1200; }              /* > fixed-top default (1030) */
-.offcanvas{ z-index: 1300; height: 350px;}               /* above navbar */
-.offcanvas-backdrop{ z-index: 1290; }      /* just under the panel */
-/* ==== Download CTA buttons ==== */
+
+/* Buttons: App store / Play store */
 .btn-store{
   display:flex; align-items:center; gap:.65rem;
   padding:.6rem .9rem;
@@ -514,54 +474,34 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
 .btn-store .label{ display:flex; flex-direction:column; line-height:1.05; }
 .btn-store .label small{ font-size:.72rem; color:var(--ink-dim); }
 .btn-store .label span{ font-weight:600; letter-spacing:.2px; }
-/* Simple animated background for the hero */
-/* FIXED: aurora background order */
+
+/* Section divider wave svg should not overflow */
+.section-divider-wave svg{ display:block; width:100%; height:auto; }
+@media (max-width: 576px){
+  .section-divider-wave{ overflow-x: clip; }
+}
+
+/* Simple animated background for the hero (optional) */
 .hero.alt-hero.aurora{
   background:
-    /* TOP layers (glows) */
     radial-gradient(60% 80% at 15% 20%, var(--aurora-a), transparent 60%),
     radial-gradient(70% 70% at 85% 25%, var(--aurora-b), transparent 65%),
     radial-gradient(80% 90% at 50% 85%, var(--aurora-c), transparent 70%),
-    /* BOTTOM base */
     linear-gradient(180deg, var(--hero-base-top), var(--hero-base-bot));
   background-repeat: no-repeat;
   background-blend-mode: screen, screen, screen, normal;
-
-  /* sizes correspond to the 4 layers above */
-  background-size:
-    160% 160%,
-    180% 180%,
-    200% 200%,
-    100% 100%;
-
-  background-position:
-    0% 0%,
-    100% 10%,
-    50% 100%,
-    center;
-
+  background-size: 160% 160%, 180% 180%, 200% 200%, 100% 100%;
+  background-position: 0% 0%, 100% 10%, 50% 100%, center;
   animation: hero-aurora 22s ease-in-out infinite alternate;
 }
-
-/* drift the glow layers a little */
 @keyframes hero-aurora{
   0%{
-    background-position:
-      center,
-      0% 0%,
-      100% 10%,
-      50% 100%;
+    background-position: center, 0% 0%, 100% 10%, 50% 100%;
   }
   100%{
-    background-position:
-      center,
-      15% 25%,
-      85% 5%,
-      55% 80%;
+    background-position: center, 15% 25%, 85% 5%, 55% 80%;
   }
 }
-
-/* accessibility: respect reduced motion */
 @media (prefers-reduced-motion: reduce){
   .hero.alt-hero.aurora{ animation: none; }
 }
@@ -649,7 +589,7 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have
       </div>
 
       <!-- RIGHT: stacked phone mock-ups with your GIFs -->
-      <div class="col-12 col-lg-6 px-3 d-none d-md-block gone" data-aos="fade-left" data-aos-delay="75" >
+      <div class="col-12 col-lg-6 px-3 d-none d-lg-block gone" data-aos="fade-left" data-aos-delay="75" >
         <div class="stacked-phones">
           <figure class="phone-frame p1" aria-label="App browsing"> 
             <div class="screen">
