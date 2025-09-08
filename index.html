@@ -50,6 +50,13 @@ body{
   background: var(--navy);
   overflow-x:hidden;
 }
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;           /* hide any accidental overflow */
+  overscroll-behavior-x: none;  /* prevent side bounce on Android/Chrome */
+  touch-action: pan-y;          /* prefer vertical panning on touch devices */
+}
 .container{ max-width:1120px; }
 
 /* Glass card */
@@ -115,7 +122,7 @@ body{
 
 /* center the badge + tighten vertical rhythm on phones */
 @media (max-width: 576px){
-  .hero.alt-hero{ padding: 1.75rem 0 2.25rem; }
+  .hero.alt-hero{ padding-bottom: 0; }
   .hero.alt-hero .badge{ margin-inline: auto; }
   .hero.alt-hero .d-flex.flex-wrap{ gap: .5rem .6rem; } /* nicer wrap */
   .hero.alt-hero .stat .h4{ line-height: 1.1; }
