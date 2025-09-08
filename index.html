@@ -103,6 +103,29 @@ body{
   text-decoration-thickness:3px;
 }
 
+/* === HERO mobile alignment & type scale === */
+.hero.alt-hero h1{
+  /* override inline size on small screens with a fluid clamp */
+  font-size: clamp(1.7rem, 6vw, 2.2rem) !important;
+  line-height: 1.15;
+}
+.hero.alt-hero .lead{
+  font-size: clamp(1rem, 3.8vw, 1.1rem) !important;
+}
+
+/* center the badge + tighten vertical rhythm on phones */
+@media (max-width: 576px){
+  .hero.alt-hero{ padding: 1.75rem 0 2.25rem; }
+  .hero.alt-hero .badge{ margin-inline: auto; }
+  .hero.alt-hero .d-flex.flex-wrap{ gap: .5rem .6rem; } /* nicer wrap */
+  .hero.alt-hero .stat .h4{ line-height: 1.1; }
+
+  /* ensure phone stack is nicely spaced & centered */
+  .stacked-phones{ margin-top: 1rem; }
+  .phone-frame{ width: 90%; }
+}
+
+
 /* stacked phones */
 .stacked-phones{
   position: relative;
@@ -113,6 +136,17 @@ body{
 }
 @media (max-width: 576px){
   .stacked-phones{ height: auto; }
+}
+/* === HERO phone stack: entry spread on load === */
+.stacked-phones .phone-frame{
+  will-change: transform, opacity;
+  transition: transform 650ms cubic-bezier(.2,.7,.2,1), opacity 450ms ease;
+}
+
+/* start state (briefly applied, then removed via JS) */
+.stacked-phones.preload .phone-frame{
+  opacity: 0;
+  transform: translateY(22px) scale(.92) rotate(0deg);
 }
 
 /* phone frame (standalone, not tied to #walkthrough) */
@@ -147,7 +181,7 @@ body{
   z-index:3;
 }
 .phone-frame.p2{
-  left:6%; bottom:2%; transform: rotate(-10deg);
+  left:6%; bottom:1%; transform: rotate(-10deg);
   z-index:2;
 }
 .phone-frame.p3{
@@ -156,7 +190,7 @@ body{
 }
 
 /* hover polish (desktop) */
-@media (hover:hover){
+/*@media (hover:hover){
   .phone-frame:hover{
     transform: translateY(-4px) scale(1.02);
     box-shadow: 0 18px 48px rgba(0,0,0,.40), 0 12px 28px rgba(0,0,0,.28) inset;
@@ -164,7 +198,6 @@ body{
   }
 }
 
-/* responsive layout: stack phones neatly on mobile */
 @media (max-width: 576px){
   .phone-frame{
     position: relative;
@@ -174,7 +207,7 @@ body{
     transform:none !important;
   }
 }
-
+*/
 
 /* =========================
    UTILITIES / CARDS / STATS
@@ -431,6 +464,81 @@ body{
   .stat{ border-right:none; border-bottom:1px dashed var(--border); padding-bottom:.5rem; margin-bottom:.5rem; }
   .stat:last-child{ border-bottom:0; }
 }
+/* Make sure the mobile menu and its backdrop are on top */
+.app-navbar{ z-index: 1200; }              /* > fixed-top default (1030) */
+.offcanvas{ z-index: 1300; height: 350px;}               /* above navbar */
+.offcanvas-backdrop{ z-index: 1290; }      /* just under the panel */
+/* ==== Download CTA buttons ==== */
+.btn-store{
+  display:flex; align-items:center; gap:.65rem;
+  padding:.6rem .9rem;
+  border-radius:.9rem;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.06);
+  color:var(--ink); text-decoration:none;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.btn-store:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.22);
+  box-shadow: 0 12px 32px rgba(0,0,0,.28);
+  color:var(--ink);
+}
+.btn-store .icon{ font-size:1.4rem; line-height:1; }
+.btn-store .label{ display:flex; flex-direction:column; line-height:1.05; }
+.btn-store .label small{ font-size:.72rem; color:var(--ink-dim); }
+.btn-store .label span{ font-weight:600; letter-spacing:.2px; }
+/* Simple animated background for the hero */
+/* FIXED: aurora background order */
+.hero.alt-hero.aurora{
+  background:
+    /* TOP layers (glows) */
+    radial-gradient(60% 80% at 15% 20%, var(--aurora-a), transparent 60%),
+    radial-gradient(70% 70% at 85% 25%, var(--aurora-b), transparent 65%),
+    radial-gradient(80% 90% at 50% 85%, var(--aurora-c), transparent 70%),
+    /* BOTTOM base */
+    linear-gradient(180deg, var(--hero-base-top), var(--hero-base-bot));
+  background-repeat: no-repeat;
+  background-blend-mode: screen, screen, screen, normal;
+
+  /* sizes correspond to the 4 layers above */
+  background-size:
+    160% 160%,
+    180% 180%,
+    200% 200%,
+    100% 100%;
+
+  background-position:
+    0% 0%,
+    100% 10%,
+    50% 100%,
+    center;
+
+  animation: hero-aurora 22s ease-in-out infinite alternate;
+}
+
+/* drift the glow layers a little */
+@keyframes hero-aurora{
+  0%{
+    background-position:
+      center,
+      0% 0%,
+      100% 10%,
+      50% 100%;
+  }
+  100%{
+    background-position:
+      center,
+      15% 25%,
+      85% 5%,
+      55% 80%;
+  }
+}
+
+/* accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .hero.alt-hero.aurora{ animation: none; }
+}
 
   </style>
 </head>
@@ -457,17 +565,28 @@ body{
             <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
             <li class="nav-item"><a class="nav-link" href="#walkthrough">Features</a></li>
             <li class="nav-item d-lg-none my-2"><a class="btn btn-brand w-100" href="https://deli-express.vercel.app/"><i class="bi bi-bag-check me-1"></i> Start Order</a></li>
+            <li class="nav-item d-lg-none my-2"><a class="btn-store" href="https://apps.apple.com/app/idYOUR_APP_ID" target="_blank" rel="noopener">
+          <i class="bi bi-apple icon"></i>
+          <span class="label"><small>Download on the</small><span>App Store</span></span>
+        </a></li>
+            <li class="nav-item d-lg-none my-2">        <a class="btn-store" href="https://play.google.com/store/apps/details?id=your.package" target="_blank" rel="noopener">
+          <i class="bi bi-google-play icon"></i>
+          <span class="label"><small>Get it on</small><span>Google Play</span></span>
+        </a></li>
           </ul>
           <a class="btn btn-brand ms-lg-3 d-none d-lg-inline-flex" href="https://deli-express.vercel.app/"><i class="bi bi-bag-check me-1"></i> Start Order</a>
+
+
+
         </div>
       </div>
     </div>
   </nav>
-<section class="hero alt-hero">
+<section class="hero  alt-hero aurora">
   <div class="container">
     <div class="row align-items-center g-4">
       <!-- LEFT: copy -->
-      <div class="col-12 col-lg-6" data-aos="fade-up">
+<div class="col-12 col-lg-6 text-center text-lg-start" data-aos="fade-up">
         <span class="badge rounded-pill mb-3 px-3 py-2"
               style="background: rgba(255,255,255,.12); border:1px solid var(--border); color: var(--ink);">
           <i class="bi bi-lightning-charge"></i> Express ordering for busy school days
@@ -479,15 +598,15 @@ body{
         <p class="lead text-white-50 mb-4" style="font-size: 1.1rem !important;">
           Skip the line and get healthier options without the wait. Designed for Chadwick International School.
         </p>
-        <div class="d-flex gap-2 flex-wrap">
-          <a href="https://deli-express.vercel.app/" class="btn btn-brand">
-            <i class="bi bi-bag-check me-1"></i>Start Order
-          </a>
-          <a href="#walkthrough" class="btn btn-ghost">See how it works</a>
-        </div>
+  <div class="d-flex gap-2 flex-wrap justify-content-center justify-content-lg-start">
+    <a href="https://deli-express.vercel.app/" class="btn btn-brand">
+      <i class="bi bi-cloud-arrow-down"></i> Download App
+    </a>
+    <a href="#walkthrough" class="btn btn-ghost">See how it works</a>
+  </div>
 
         <!-- quick stats, inline and compact -->
-        <div class="row text-center mt-4 g-3">
+  <div class="row row-cols-3 text-center mt-4 g-3">
           <div class="col stat">
             <div class="h4 mb-0">~1.2m</div>
             <div class="text-white-50 small">/ Express order</div>
@@ -504,9 +623,9 @@ body{
       </div>
 
       <!-- RIGHT: stacked phone mock-ups with your GIFs -->
-      <div class="col-12 col-lg-6 px-3" data-aos="fade-left" data-aos-delay="75">
+      <div class="col-12 col-lg-6 px-3 d-none d-md-block" data-aos="fade-left" data-aos-delay="75" >
         <div class="stacked-phones">
-          <figure class="phone-frame p1" aria-label="App browsing">
+          <figure class="phone-frame p1" aria-label="App browsing"> 
             <div class="screen">
               <img src="static/images/gifs/1.gif" alt="Browsing menu in Deli Express app" loading="eager">
             </div>
@@ -538,10 +657,10 @@ body{
   <span class="step-eyebrow">About</span>
   <h2 class="h4 mt-2 mb-2">Why Deli Express?</h2>
 
-  <p class="lede mb-3">
-    Too many students were <strong>skipping lunch</strong> or crowding the deli at once—creating
-    <strong>long lines</strong>. Deli Express spreads demand and speeds pickup.
-  </p>
+<p class="lede mb-3" style="text-align: justify;">
+  Lunch-hour patterns show students either forgoing meals or arriving simultaneously at the deli, resulting in prolonged queues. Deli Express uses scheduled pre-ordering to distribute demand and accelerate pickup.
+</p>
+
 
   <ul class="about-points">
     <li>
@@ -817,9 +936,9 @@ body{
       </p>
 
       <div class="d-flex flex-wrap resp-chips mb-3">
-        <span class="resp-chip"><i class="bi bi-grid-1x2"></i>Fluid grid</span>
-        <span class="resp-chip"><i class="bi bi-cursor"></i>Touch & mouse</span>
-        <span class="resp-chip"><i class="bi bi-lightning-charge"></i>Fast loads</span>
+        <span class="resp-chip"><i class="bi bi-grid-1x2 me-1"></i> Fluid grid</span>
+        <span class="resp-chip"><i class="bi bi-cursor ms-2 me-1"></i> Touch & mouse</span>
+        <span class="resp-chip"><i class="bi bi-lightning-charge ms-2 me-1"></i> Fast loads</span>
       </div>
 
       <ul class="text-white-50 small ps-3 mb-0">
@@ -890,7 +1009,31 @@ body{
           A quick look at the deli at Chadwick—fresh stations, grab-and-go, and
           express pickup lanes designed to keep lines moving.
         </p>
-      </div>
+<!-- App promo (place right below the lede paragraph in the left column) -->
+<div class="mt-3">
+  <p class="text-white-50 mb-2">
+    Pre-order from your phone, choose a timed pickup window, and skip the line with Express.
+  </p>
+  <ul class="text-white-50 small ps-3 mb-3">
+    <li>Order in under 30 seconds</li>
+    <li>5-minute pickup windows</li>
+    <li>Points & perks on every order</li>
+  </ul>
+  <div class="d-flex flex-wrap gap-2">
+    <a class="btn-store" href="https://apps.apple.com/app/idYOUR_APP_ID" target="_blank" rel="noopener" aria-label="Download on the App Store">
+      <i class="bi bi-apple icon"></i>
+      <span class="label"><small>Download on the</small><span>App Store</span></span>
+    </a>
+    <a class="btn-store" href="https://play.google.com/store/apps/details?id=your.package" target="_blank" rel="noopener" aria-label="Get it on Google Play">
+      <i class="bi bi-google-play icon"></i>
+      <span class="label"><small>Get it on</small><span>Google Play</span></span>
+    </a>
+  </div>
+</div>
+</div>
+
+      <!-- App promo (place right below the lede paragraph in the left column) -->
+
 
       <div class="col-12 col-lg-8" data-aos="fade-left">
         <div class="grid">
@@ -944,14 +1087,14 @@ body{
         </p>
 
         <ul class="about-points mb-3">
-          <li>
+          <li class="mb-3">
             
             <div>
               <strong><i class="bi bi-graph-up-arrow me-1"></i> Flatten peak lunch congestion</strong>
               <div class="small">5-minute slots distribute demand and shorten lines.</div>
             </div>
           </li>
-          <li>
+          <li class="mb-3">
             
             <div>
               <strong><i class="bi bi-shield-lock me-1"></i> School SSO ready</strong>
@@ -968,12 +1111,18 @@ body{
         </ul>
 
         <div class="d-flex gap-2 flex-wrap">
-          <a href="/contact" class="btn btn-brand"><i class="bi bi-envelope me-1"></i>Request a pilot</a>
+            <a
+    class="btn btn-brand"
+    href="mailto:deli-express@yourdomain.com?subject=Deli%20Express%20Pilot%20Request&body=Hi%20Deli%20Express%20team,%0A%0AWe%27d%20like%20to%20discuss%20a%20pilot%20for%20our%20campus.%0A%0ASchool:%20%0AExpected%20start%20window:%20%0AContact%20name/role:%20%0A%0AThanks!"
+  ><i class="bi bi-envelope me-1"></i>Request a pilot</a>
           <a href="https://deli-express.vercel.app/" class="btn btn-ghost">View live demo</a>
         </div>
 
         <small class="d-block mt-3 logos-note">
-          Interested in partnering? <a class="link-light text-decoration-underline" href="/contact">Get in touch</a>.
+          Interested in partnering?   <a
+    class="link-light text-decoration-underline"
+    href="mailto:deli-express@yourdomain.com?subject=Partnership%20Inquiry%20%E2%80%94%20Deli%20Express"
+  >Get in touch</a>.
         </small>
       </div>
 
@@ -991,7 +1140,7 @@ body{
       </div>
 
       <!-- Bottom row: one bigger logo, centered under the two -->
-      <div class="col-10 col-md-8 mx-auto d-flex align-items-center justify-content-center">
+      <div class="col-6 col-md-8 mx-auto d-flex align-items-center justify-content-center">
         <a href="#"><img class="logo big" src="static/images/logos/logo3.webp" alt="Partner School 3"></a>
       </div>
     </div>
@@ -1018,6 +1167,38 @@ body{
 </div>
 
 
+
+
+<section id="download" class="py-5" style="background-color: #111a2e;">
+  <div class="container">
+    <div class="glass-xl p-4 p-md-5 text-center card-lift" data-aos="fade-up">
+      <span class="step-eyebrow">Get the app</span>
+      <h2 class="h4 mt-2 mb-2">Deli Express on your phone</h2>
+      <p class="text-white-50 mb-4">Install for the fastest ordering experience and one-tap reorders.</p>
+
+      <div class="d-flex justify-content-center flex-wrap gap-2 gap-md-3">
+        <a class="btn-store" href="https://apps.apple.com/app/idYOUR_APP_ID" target="_blank" rel="noopener">
+          <i class="bi bi-apple icon"></i>
+          <span class="label"><small>Download on the</small><span>App Store</span></span>
+        </a>
+
+        <a class="btn-store" href="https://play.google.com/store/apps/details?id=your.package" target="_blank" rel="noopener">
+          <i class="bi bi-google-play icon"></i>
+          <span class="label"><small>Get it on</small><span>Google Play</span></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="section-divider-wave" aria-hidden="true">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <rect width="100%" height="120" fill="#111a2e"></rect>
+    <path d="M0,44 C180,80 360,80 540,56 C720,32 900,16 1080,44 C1260,72 1350,72 1440,52 L1440,120 L0,120 Z" fill="rgba(255,255,255,.08)"></path>
+    <path d="M0,52 C160,88 320,88 480,64 C680,32 880,24 1080,52 C1240,76 1340,72 1440,60 L1440,120 L0,120 Z" fill="var(--hero-base-bot)"></path>
+  </svg>
+</div>
 
 
   <section class="pb-5" style="background-color: #111a2e;">
@@ -1094,6 +1275,18 @@ body{
       offset: 60
     });
   </script>
+<script>
+window.addEventListener('load', () => {
+  const stack = document.querySelector('.stacked-phones');
+  if (!stack || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  stack.classList.add('preload');
+  requestAnimationFrame(() => {
+    // force a reflow so the start state is committed
+    void stack.offsetWidth;
+    stack.classList.remove('preload');
+  });
+});
+</script>
 
 <script>
 (() => {
