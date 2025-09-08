@@ -77,67 +77,104 @@ body{
 .btn-ghost{ background:transparent; border:1px solid var(--border); color:var(--ink); }
 .btn-ghost:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.25); }
 
-/* =========================
-   HERO (with aurora bg)
-========================= */
-.hero{
+/* === HERO (alt, no animation, stacked phones) === */
+.hero.alt-hero{
   margin-top: 55px;
   position: relative;
   isolation: isolate;
-  overflow: clip;
   box-sizing: border-box;
   min-height: calc(100vh - var(--nav-h));
   padding: 2.5rem 0 3.5rem;
-}
-@supports (height: 100dvh){
-  .hero{ min-height: calc(100dvh - var(--nav-h)); }
-}
-
-/* base underlay */
-.hero::after{
-  content:"";
-  position:absolute; inset:-10% -50vw -8% -50vw;
-  z-index:-2;
   background: linear-gradient(180deg, var(--hero-base-top), var(--hero-base-bot));
 }
+@supports (height: 100dvh){
+  .hero.alt-hero{ min-height: calc(100dvh - var(--nav-h)); }
+}
+/* kill previous animated layers */
+.hero.alt-hero::before,
+.hero.alt-hero::after{ content: none !important; }
 
-/* aurora layer */
-.hero::before{
-  content:"";
-  position:absolute; left:50%; top:-12%;
-  width:120vw; height:120%;
-  z-index:-1; pointer-events:none;
-  filter: blur(18px) saturate(115%); opacity:.9;
-  background:
-    radial-gradient(60% 80% at 12% 20%, var(--aurora-a), transparent 62%),
-    radial-gradient(70% 60% at 85% 25%, var(--aurora-b), transparent 62%),
-    radial-gradient(55% 70% at 50% 78%, var(--aurora-c), transparent 65%),
-    conic-gradient(from 0deg at 50% 50%,
-      rgba(110,168,254,.18), rgba(255,255,255,0) 25%,
-      rgba(159,178,217,.18) 50%, rgba(255,255,255,0) 75%,
-      rgba(110,168,254,.18));
-  transform: translate3d(-50%,0,0) scale(1.04);
-  animation: auroraBreathe 48s ease-in-out infinite alternate,
-             auroraSpin    96s linear infinite;
-}
-@keyframes auroraSpin { to { transform: translate3d(-50%,0,0) rotate(360deg) scale(1.04); } }
-@keyframes auroraBreathe{
-  0%   { transform: translate3d(-50%,0,0) rotate(0deg)  scale(1.02); }
-  50%  { transform: translate3d(calc(-50% + 6px),-3px,0) rotate(180deg) scale(1.07); }
-  100% { transform: translate3d(calc(-50% - 3px), 3px,0) rotate(360deg) scale(1.04); }
-}
-@media (prefers-reduced-motion: reduce){
-  .hero::before{ animation:none; }
-}
-
-/* hero bits */
-.hero h1{ letter-spacing:.2px; }
-.hero-mark{
+/* headline + underline accent */
+.hero.alt-hero h1{ letter-spacing:.2px; }
+.hero.alt-hero .hero-mark{
   text-decoration:underline;
   text-decoration-color:var(--c-542);
   text-underline-offset:.25em;
   text-decoration-thickness:3px;
 }
+
+/* stacked phones */
+.stacked-phones{
+  position: relative;
+  height: 520px;
+}
+@media (max-width: 992px){
+  .stacked-phones{ height: 460px; }
+}
+@media (max-width: 576px){
+  .stacked-phones{ height: auto; }
+}
+
+/* phone frame (standalone, not tied to #walkthrough) */
+.phone-frame{
+  position: absolute;
+  width: 240px;
+  aspect-ratio: 9 / 19.5;
+  border-radius: 2rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow: 0 12px 28px rgba(0,0,0,.28) inset, 0 16px 40px rgba(0,0,0,.32);
+  overflow: hidden;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+.phone-frame::before{
+  content:""; position:absolute; top:.4rem; left:50%; transform:translateX(-50%);
+  width:38%; height:.55rem; border-radius:0 0 .6rem .6rem;
+  background:rgba(0,0,0,.45);
+  filter: blur(.2px);
+}
+.phone-frame .screen{
+  position:absolute; inset:.6rem; border-radius:1rem; overflow:hidden;
+  border:1px solid rgba(255,255,255,.08); background:#000;
+}
+.phone-frame .screen img{
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+
+/* positions */
+.phone-frame.p1{
+  left:50%; top:2%; transform: translateX(-50%) rotate(-3deg);
+  z-index:3;
+}
+.phone-frame.p2{
+  left:6%; bottom:2%; transform: rotate(-10deg);
+  z-index:2;
+}
+.phone-frame.p3{
+  right:6%; top:10%; transform: rotate(8deg);
+  z-index:1;
+}
+
+/* hover polish (desktop) */
+@media (hover:hover){
+  .phone-frame:hover{
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 18px 48px rgba(0,0,0,.40), 0 12px 28px rgba(0,0,0,.28) inset;
+    border-color: rgba(255,255,255,.22);
+  }
+}
+
+/* responsive layout: stack phones neatly on mobile */
+@media (max-width: 576px){
+  .phone-frame{
+    position: relative;
+    width: 88%;
+    margin: 0 auto 1rem;
+    left:auto; right:auto; top:auto; bottom:auto;
+    transform:none !important;
+  }
+}
+
 
 /* =========================
    UTILITIES / CARDS / STATS
@@ -426,51 +463,72 @@ body{
       </div>
     </div>
   </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container" >
-      <div class="row align-items-center g-4">
-        <div class="hero-aurora" aria-hidden="true"></div>
-
-        <div class="col-12 col-lg-6" data-aos="fade-up">
-          <span class="badge rounded-pill mb-3 px-3 py-2" style="background: rgba(255,255,255,.12); border:1px solid var(--border); color: var(--ink);">
-            <i class="bi bi-lightning-charge"></i> Express ordering for busy school days
-          </span>
-          <h1 class="display-5 fw-bold mb-3" style="font-size: 2.2rem !important;">Fresh. Fast. Friendly.<br/>Order ahead with <span class="hero-mark">Deli Express</span></h1>
-          <p class="lead text-white-50 mb-4" style="font-size: 1.1rem !important;">Skip the line and get healthier options without the wait. Designed for Chadwick International School.</p>
-          <!-- FEWER BUTTONS: primary + one secondary -->
-          <div class="d-flex gap-2 flex-wrap">
-            <a href="https://deli-express.vercel.app/" class="btn btn-brand"><i class="bi bi-bag-check me-1"></i>Start Order</a>
-          </div>
+<section class="hero alt-hero">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <!-- LEFT: copy -->
+      <div class="col-12 col-lg-6" data-aos="fade-up">
+        <span class="badge rounded-pill mb-3 px-3 py-2"
+              style="background: rgba(255,255,255,.12); border:1px solid var(--border); color: var(--ink);">
+          <i class="bi bi-lightning-charge"></i> Express ordering for busy school days
+        </span>
+        <h1 class="display-5 fw-bold mb-3" style="font-size: 2.2rem !important;">
+          Fresh. Fast. Friendly.<br/>
+          Order ahead with <span class="hero-mark">Deli Express</span>
+        </h1>
+        <p class="lead text-white-50 mb-4" style="font-size: 1.1rem !important;">
+          Skip the line and get healthier options without the wait. Designed for Chadwick International School.
+        </p>
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="https://deli-express.vercel.app/" class="btn btn-brand">
+            <i class="bi bi-bag-check me-1"></i>Start Order
+          </a>
+          <a href="#walkthrough" class="btn btn-ghost">See how it works</a>
         </div>
-        <div class="col-12 col-lg-6 px-3" data-aos="fade-up" data-aos-delay="100">
-          <div class="glass-xl p-3 p-md-4 card-lift">
-            <div class="device d-flex align-items-center justify-content-center">
-              <div class="text-center">
-                <img src="static/images/desktop2.png" alt="Deli Express" class="mb-3" style="width:100%;"/>
-              </div>
-            </div>
-            <div class="row text-center mt-3 g-3">
-              <div class="col stat">
-                <div class="h4 mb-0">~1.2m</div>
-                <div class="text-white-50 small">/ Express order</div>
-              </div>
-              <div class="col stat">
-                <div class="h4 mb-0">10k+</div>
-                <div class="text-white-50 small">Orders served</div>
-              </div>
-              <div class="col">
-                <div class="h4 mb-0">98%</div>
-                <div class="text-white-50 small">On-time pickup</div>
-              </div>
-            </div>
+
+        <!-- quick stats, inline and compact -->
+        <div class="row text-center mt-4 g-3">
+          <div class="col stat">
+            <div class="h4 mb-0">~1.2m</div>
+            <div class="text-white-50 small">/ Express order</div>
+          </div>
+          <div class="col stat">
+            <div class="h4 mb-0">10k+</div>
+            <div class="text-white-50 small">Orders served</div>
+          </div>
+          <div class="col">
+            <div class="h4 mb-0">98%</div>
+            <div class="text-white-50 small">On-time pickup</div>
           </div>
         </div>
       </div>
 
+      <!-- RIGHT: stacked phone mock-ups with your GIFs -->
+      <div class="col-12 col-lg-6 px-3" data-aos="fade-left" data-aos-delay="75">
+        <div class="stacked-phones">
+          <figure class="phone-frame p1" aria-label="App browsing">
+            <div class="screen">
+              <img src="static/images/gifs/1.gif" alt="Browsing menu in Deli Express app" loading="eager">
+            </div>
+          </figure>
+
+          <figure class="phone-frame p2" aria-label="Timeslot & checkout">
+            <div class="screen">
+              <img src="static/images/gifs/2.gif" alt="Selecting timeslot and checkout" loading="lazy">
+            </div>
+          </figure>
+
+          <figure class="phone-frame p3" aria-label="Pickup & rewards">
+            <div class="screen">
+              <img src="static/images/gifs/3.gif" alt="Pickup and rewards view" loading="lazy">
+            </div>
+          </figure>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
+
 <section id="about" class="py-5"  style="background-color: ;" >
   <div class="container mt-5">
     <div class="row align-items-center g-5">
@@ -630,7 +688,7 @@ body{
 
   <!-- Row 1: Text left, GIF right -->
   <div class="row align-items-center g-4 mb-4 mb-md-5">
-    <div class="col-12 col-lg-6" data-aos="fade-right">
+    <div class="col-12 col-lg-6 order-2 order-lg-1" data-aos="fade-right">
       <div class="step-card h-100">
         <span class="accent" aria-hidden="true"></span>
         <span class="step-eyebrow">Step 1 of 3</span>
@@ -648,7 +706,7 @@ body{
     </div>
 
 
-    <div class="col-12 col-lg-6" data-aos="fade-left" data-aos-delay="75">
+    <div class="col-12 col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="75">
       <figure class="m-0">
         <div class="phone glass-xl card-lift">
           <div class="screen">
@@ -662,7 +720,7 @@ body{
 
   <!-- Row 2: GIF left, Text right (alternate) -->
   <div class="row align-items-center g-4 mb-4 mb-md-5">
-    <div class="col-12 col-lg-6 order-lg-1" data-aos="fade-right" data-aos-delay="75">
+    <div class="col-12 col-lg-6 order-lg-1 order-1 order-lg-1" data-aos="fade-right" data-aos-delay="75">
       <figure class="m-0">
         <div class="phone glass-xl card-lift">
           <div class="screen">
@@ -672,7 +730,7 @@ body{
         </div>
       </figure>
     </div>
-<div class="col-12 col-lg-6 order-lg-2" data-aos="fade-left">
+<div class="col-12 col-lg-6 order-2 order-lg-2" data-aos="fade-left">
   <div class="step-card h-100">
     <span class="accent" aria-hidden="true"></span>
     <span class="step-eyebrow">Step 2 of 3</span>
@@ -693,7 +751,7 @@ body{
 
   <!-- Row 3: Text left, GIF right -->
   <div class="row align-items-center g-4">
-<div class="col-12 col-lg-6" data-aos="fade-right">
+<div class="col-12 col-lg-6 order-2 order-lg-1" data-aos="fade-right">
   <div class="step-card h-100">
     <span class="accent" aria-hidden="true"></span>
     <span class="step-eyebrow">Step 3 of 3</span>
@@ -713,7 +771,7 @@ body{
   </div>
 </div>
 
-    <div class="col-12 col-lg-6" data-aos="fade-left" data-aos-delay="75">
+    <div class="col-12 col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="75">
       <figure class="m-0">
         <div class="phone glass-xl card-lift">
           <div class="screen">
