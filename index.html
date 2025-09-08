@@ -46,6 +46,8 @@ html{
 }
 body{
   min-height:100vh; 
+  width: 100%;
+  max-width: 100%;
   color:var(--ink);
   background: var(--navy);
   overflow-x:hidden;
@@ -66,6 +68,7 @@ body{
 /* =========================
    NAVBAR & BUTTONS
 ========================= */
+
 .app-navbar{
   backdrop-filter:saturate(120%) blur(8px);
   background:linear-gradient(180deg, rgba(15,23,42,.65), rgba(10,15,28,.45));
@@ -78,6 +81,22 @@ body{
 .btn-brand:hover{ background:#3D50A6; color:#fff; }
 .btn-ghost{ background:transparent; border:1px solid var(--border); color:var(--ink); }
 .btn-ghost:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.25); }
+/* 1) Stop hidden offcanvas from causing horizontal scroll */
+.app-navbar{ overflow-x: clip; } /* clip > hidden avoids compositing glitches */
+
+/* 2) Make the offcanvas size responsive and scroll inside itself */
+.offcanvas{
+  /* never wider than the viewport; tune 320px if you want a wider panel */
+  --bs-offcanvas-width: min(320px, 92vw);
+  height: auto;                 /* remove hard 350px */
+  max-height: 85dvh;            /* fit on small phones */
+  overflow-y: auto;             /* scroll contents, not the page */
+}
+
+/* 3) Ensure the page content never sits under the fixed navbar */
+:root{ --nav-h: 64px; }                  /* your measured nav height */
+.hero.alt-hero{ margin-top: 0; padding-top: var(--nav-h); }  /* replace the 55px margin */
+html{ scroll-padding-top: calc(var(--nav-h) + 8px); }        /* you already have this */
 
 /* === HERO (alt, no animation, stacked phones) === */
 .hero.alt-hero{
@@ -584,7 +603,7 @@ body{
       </div>
     </div>
   </nav>
-<section class="hero  alt-hero aurora">
+<section class="hero  alt-hero">
   <div class="container">
     <div class="row align-items-center g-4">
       <!-- LEFT: copy -->
