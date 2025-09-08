@@ -12,440 +12,86 @@
 <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="static/images/favicon.ico">
   <style>
-    :root{
-      --ink:#e9eefb; --ink-dim:#cfd7ff; --border: rgba(255,255,255,.12);
-      --glass1: rgba(23,32,57,.60); --glass2: rgba(17,26,46,.55);
-      --c-539:#0b3a63; --c-542:#6ea8fe; --c-544:#9fb2d9;
-      --navy:#0b1220; --nav2:#111a2e;
-    }
+/* =========================
+   TOKENS & GLOBAL BASE
+========================= */
+:root{
+  /* palette */
+  --ink:#e9eefb; 
+  --ink-dim:#cfd7ff; 
+  --border: rgba(255,255,255,.12);
+  --glass1: rgba(23,32,57,.60); 
+  --glass2: rgba(17,26,46,.55);
+  --c-539:#0b3a63; 
+  --c-542:#6ea8fe; 
+  --c-544:#9fb2d9;
+  --navy:#0b1220; 
+  --nav2:#111a2e;
 
-    html { scroll-behavior: smooth; background-color: #0b1220;}
-    body{
-      min-height:100vh; color:var(--ink);
-      background-color: #e9eefb;
-/*      background:
-        radial-gradient(1200px 900px at 10% 10%, rgba(255,255,255,.08), transparent 60%),
-        radial-gradient(1200px 900px at 90% 20%, rgba(255,255,255,.06), transparent 60%),
-        linear-gradient(180deg, var(--navy) 0%, var(--nav2) 100%);*/
-      overflow-x:hidden;
-    }
-    .container{ max-width:1120px; }
+  /* hero bg */
+  --aurora-a: rgba(110,168,254,.35);
+  --aurora-b: rgba(159,178,217,.28);
+  --aurora-c: rgba(255,255,255,.12);
+  --hero-base-top: rgba(11,18,32,.96);
+  --hero-base-bot: rgba(17,26,46,.92);
 
-    .glass-xl{
-      background:linear-gradient(180deg,var(--glass1),var(--glass2));
-      border:1px solid var(--border);
-      border-radius:1.25rem;
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
-      backdrop-filter:saturate(120%) blur(8px);
-    }
-
-    /* Navbar */
-    .app-navbar{
-      backdrop-filter:saturate(120%) blur(8px);
-      background:linear-gradient(180deg, rgba(15,23,42,.65), rgba(10,15,28,.45));
-      border-bottom:1px solid var(--border);
-    }
-    .nav-link{ color:var(--ink-dim); }
-    .nav-link:hover{ color:var(--ink); }
-
-    /* Buttons */
-    .btn-brand{ background:var(--c-539); color:#fff; border:0; }
-    .btn-brand:hover{ background:#3D50A6; color:#fff; }
-    .btn-ghost{ background:transparent; border:1px solid var(--border); color:var(--ink); }
-    .btn-ghost:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.25); }
-    .badge-brand{ background:var(--c-542); color:#0b1220; padding: 20px 10px; }
-
-    /* Hero */
-     .hero{
-      margin-top: 55px;
-      position: relative;
-      isolation: isolate;   /* keep background layers behind content, not the whole page */
-      overflow: visible;    /* let the background bleed past the container */
-/*      padding: rem 0 5rem;*/
-    }
-    /* base gradient underlay */
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:-10% -50vw -8% -50vw;
-  z-index:0;  /* was -2 */
-  background: linear-gradient(180deg, var(--hero-base-top), var(--hero-base-bot));
+  /* layout */
+  --nav-h: 64px;        /* if you measure navbar height in JS, update this */
 }
 
-    /* animated aurora sheet */
-
-    /* keep hero content above the backgrounds */
-/*    .hero .row{ position: relative; z-index: 2; }*/
-
-    .hero h1{ letter-spacing:.2px; }
-    .hero-mark{
-      text-decoration:underline;
-      text-decoration-color:var(--c-542);
-      text-underline-offset:.25em;
-      text-decoration-thickness:3px;
-    }
-    .device{ aspect-ratio:16/10; border-radius:1rem; border:1px solid var(--border); background:rgba(255,255,255,.04); }
-
-    /* Feature cards */
-    .feature-icon{ width:44px; height:44px; display:grid; place-items:center; border-radius:.75rem; background:rgba(255,255,255,.08); border:1px solid var(--border); }
-    .card-lift{ transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
-    .card-lift:hover{ transform:translateY(-4px); box-shadow:0 12px 32px rgba(0,0,0,.28); border-color:rgba(255,255,255,.22) !important; }
-
-    /* Stats */
-    .stat{ border-right:1px dashed var(--border); }
-    .stat:last-child{ border-right:none; }
-
-    /* Steps */
-    .steps .step-index{ width:36px; height:36px; border-radius:50%; display:inline-grid; place-items:center; background:rgba(255,255,255,.08); border:1px solid var(--border); }
-
-    /* Accordion dark polish */
-    .accordion-button{ background:transparent !important; color:var(--ink) !important; box-shadow:none !important; }
-    .accordion-button:not(.collapsed){ background:rgba(255,255,255,.06) !important; color:var(--ink) !important; }
-    .accordion-item{ background:transparent; border-color:var(--border); }
-    .accordion-body{ color:var(--ink-dim); }
-    .accordion-button::after{ filter: invert(1) opacity(.8); }
-
-    /* Footer */
-    .site-footer{
-/*      margin-top:2rem;
-      border-top:1px solid var(--border);*/
-      background:linear-gradient(180deg, rgba(11,18,32,.7), rgba(17,26,46,.55));
-      backdrop-filter:saturate(120%) blur(8px);
-    }
-    .footer-top .link{ color:var(--ink-dim); text-decoration:none; }
-    .footer-top .link:hover{ color:var(--ink); }
-    .footer-mini{
-/*      border-top:1px solid var(--border);*/
-      color:var(--ink-dim);
-    }
-
-    @media (max-width:576px){
-      .hero{ padding:6.5rem 0 3.5rem; }
-      .stat{ border-right:none; border-bottom:1px dashed var(--border); padding-bottom:.5rem; margin-bottom:.5rem; }
-      .stat:last-child{ border-bottom:0; }
-    }
-
-
-.phone {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 9 / 19.5;
-  border-radius: 2rem;
-  border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  box-shadow: 0 12px 28px rgba(0,0,0,.28) inset, 0 10px 28px rgba(0,0,0,.22);
-  overflow: hidden;
+html{ 
+  scroll-behavior: smooth; 
+  background-color: var(--navy);
+  scroll-padding-top: calc(var(--nav-h) + 8px);
 }
-.phone::before{
-  /* notch */
-  content:"";
-  position:absolute; top:.35rem; left:50%; transform:translateX(-50%);
-  width:40%; height:.55rem; border-radius:0 0 .6rem .6rem;
-  background:rgba(0,0,0,.45);
-  filter: blur(.2px);
+body{
+  min-height:100vh; 
+  color:var(--ink);
+  background: var(--navy);
+  overflow-x:hidden;
 }
-.phone .screen{
-  position:absolute; inset:.75rem; border-radius:1.2rem; overflow:hidden;
-  border:1px solid rgba(255,255,255,.08);
-  background: #000;
-}
-.phone .screen img{
-  width:100%; height:100%; object-fit:cover; display:block;
-}
-#walkthrough{
-  background-color: #111a2e;
-}
-/* Walkthrough section polish */
-.walkthrough .step-eyebrow{
-  display:inline-block; font-size:.8rem; letter-spacing:.06em;
-  color:var(--ink-dim); text-transform:uppercase;
-  border:1px solid var(--border); padding:.25rem 1.1rem; border-radius:999px;
-}
-.walkthrough .bullet{
-  display:flex; gap:.6rem; align-items:flex-start;
-}
-.walkthrough .bullet .dot{
-  width:.5rem; height:.5rem; border-radius:50%;
-  background: var(--c-542);
-  margin-top:.45rem;
-}
-.walkthrough .cardish{
-  background: linear-gradient(180deg, var(--glass1), var(--glass2));
-  border:1px solid var(--border); border-radius:1.25rem;
-  padding:1.2rem;
-}
-/* Super-compact phone size */
-.walkthrough .phone{
-  width: 200px;              /* hard-cap small */
-  margin-inline: auto;       /* center it */
-}
+.container{ max-width:1120px; }
 
-@media (min-width: 768px){    /* tablets */
-  .walkthrough .phone{ width: 220px; }
-}
-@media (min-width: 992px){    /* laptops/desktop */
-  .walkthrough .phone{ width: 240px; }   /* still compact */
-}
-
-/* Tighten bezel so small phones don't look bulky */
-.walkthrough .phone .screen{ inset: .55rem; border-radius: .9rem; }
-
-/* Optional: keep the column from “pushing” it wider */
-.walkthrough figure{ display:flex; justify-content:center; }
-
-/* --- Responsive Showcase (overlapped devices, no modal) --- */
-
-.responsive-stack{
-  position: relative;
-  min-height: 360px;
-}
-
-.device-card{
-  position: relative;
-  background: linear-gradient(180deg, var(--glass1), var(--glass2));
+/* Glass card */
+.glass-xl{
+  background:linear-gradient(180deg,var(--glass1),var(--glass2));
   border:1px solid var(--border);
   border-radius:1.25rem;
-  padding:1.2rem;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  backdrop-filter:saturate(120%) blur(8px);
 }
 
-/* Base sizes (kept modest) */
-.responsive-stack .laptop{ max-width: 690px; margin: 0 auto; }
-.responsive-stack .phone { max-width: 240px; }
-
-/* Overlap positioning at large screens */
-@media (min-width: 992px){
-  .responsive-stack{
-    min-height: 440px;
-  }
-  .responsive-stack .laptop-wrap{
-    position:absolute; left:0; right:0; top:0;
-    display:flex; justify-content:center; pointer-events:none; /* phone stays clickable if needed */
-  }
-  .responsive-stack .phone-wrap{
-    position:absolute; right:6%; bottom:-6%;
-    transform: rotate(-2.2deg);
-  }
+/* =========================
+   NAVBAR & BUTTONS
+========================= */
+.app-navbar{
+  backdrop-filter:saturate(120%) blur(8px);
+  background:linear-gradient(180deg, rgba(15,23,42,.65), rgba(10,15,28,.45));
+  border-bottom:1px solid var(--border);
 }
+.nav-link{ color:var(--ink-dim); }
+.nav-link:hover{ color:var(--ink); }
 
-/* Subtle 3D polish + hover */
-.mock-tilt{
-  transform: perspective(1200px) rotateX(0.6deg);
-  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
-  will-change: transform;
-}
-.mock-tilt:hover{
-  transform: perspective(1200px) rotateX(0deg) translateY(-2px);
-  box-shadow: 0 16px 42px rgba(0,0,0,.28);
-  border-color: rgba(255,255,255,.22);
-}
+.btn-brand{ background:var(--c-539); color:#fff; border:0; }
+.btn-brand:hover{ background:#3D50A6; color:#fff; }
+.btn-ghost{ background:transparent; border:1px solid var(--border); color:var(--ink); }
+.btn-ghost:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.25); }
 
-/* Soft ambient shadow rings */
-.shadow-ring{
-  box-shadow:
-    0 10px 26px rgba(0,0,0,.24) inset,
-    0 12px 34px rgba(0,0,0,.28);
-}
-
-/* Tiny accent glow under phone */
-.phone-glow{
-  position: absolute; inset:auto 0  -14px 0; height:22px;
-  margin:auto; width:72%;
-  border-radius:999px;
-  background: radial-gradient(60% 100% at 50% 50%, rgba(110,168,254,.25), rgba(110,168,254,0) 70%);
-  filter: blur(6px);
-  pointer-events:none;
-}
-
-/* Laptop Frame */
-.laptop-showcase {
-  max-width: 800px;
-  margin: 0 auto;
-  position: relative;
-}
-
-.laptop {
-  position: relative;
-  aspect-ratio: 16 / 10;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  box-shadow: 0 10px 26px rgba(0,0,0,.24) inset, 0 10px 28px rgba(0,0,0,.22);
-  overflow: hidden;
-}
-
-.laptop .screen {
-  position: absolute;
-  inset: .8rem .8rem 1.6rem .8rem;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.08);
-  background: #000;
-}
-
-/* Image Slideshow */
-.laptop .screen img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-
-.laptop .screen img.active {
-  opacity: 1;
-}
-
-/* Laptop Base Bar */
-/*.laptop::after {
-  content: "";
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: .4rem;
-  height: .4rem;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(255,255,255,.2), rgba(255,255,255,.06));
-  border: 1px solid rgba(255,255,255,.08);
-}*/
-
-/* Responsive */
-@media (max-width: 768px) {
-  .laptop-showcase {
-    max-width: 95%;
-  }
-}
-/* --- Laptop frame + slideshow (reuses your style tokens) --- */
-.laptop{ position:relative; aspect-ratio:16/10; border-radius:14px; border:1px solid var(--border);
-  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  box-shadow:0 10px 26px rgba(0,0,0,.24) inset, 0 10px 28px rgba(0,0,0,.22); overflow:hidden; }
-.laptop .screen {
-  position: absolute;
-  inset: .8rem .8rem 1.6rem .8rem;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.08);
-  background: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.laptop .screen img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* fills the area without distortion */
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  transition: opacity 900ms ease;
-}
-
-.laptop .screen img.active {
-  opacity: 1;
-}
-/*
-.laptop::after{ content:""; position:absolute; left:8%; right:8%; bottom:.4rem; height:.4rem; border-radius:999px;
-  background:linear-gradient(90deg, rgba(255,255,255,.2), rgba(255,255,255,.06)); border:1px solid rgba(255,255,255,.08); }*/
-
-/* small chips */
-.resp-chips{ gap:.5rem; }
-.resp-chip{ border:1px solid var(--border); background:rgba(255,255,255,.04); color:var(--ink-dim);
-  padding:.35rem .7rem; border-radius:999px; font-size:.85rem; }
-.resp-chip i{ margin-right:.35rem; }
-
-/* optional: keep laptop from growing too big */
-#responsive .laptop{ max-width:720px; margin-inline:auto; }
-
-/* Screen hosts stacked .shot layers */
-.laptop .screen{
-  position:absolute; inset:.8rem .8rem 1.6rem .8rem;
-  border-radius:10px; overflow:hidden;
-  border:1px solid rgba(255,255,255,.08);
-  background:#000;
-}
-
-/* Each slide */
-.laptop .screen .shot{
-  position:absolute; inset:6px;                /* inner padding so border is visible */
-  border-radius:8px; background:#000;          /* letterbox background */
-  opacity:0; transition:opacity 900ms ease;    /* fade */
-}
-
-/* Visible slide */
-.laptop .screen .shot.active{ opacity:1; }
-
-/* Thin border that won't get clipped (inside the screen) */
-/*.laptop .screen .shot::before{
-  content:""; position:absolute; inset:0; border-radius:8px;
-  box-shadow:0 0 0 1px rgba(255,255,255,.22) inset;
-  pointer-events:none;
-}
-*/
-/* The actual screenshot */
-.laptop .screen .shot img{
-  width:100%; height:100%;
-  object-fit: contain;          /* show the whole screenshot */
-  display:block;
-}
-/* Reset old slideshow rules that hid the <img> */
-#responsive .laptop .screen img{
-  opacity: 1 !important;     /* override the earlier opacity:0 */
-  position: static;           /* we don't need absolute on the img now */
-}
-
-/* We only fade the .shot layers now */
-#responsive .laptop .screen .shot{
-  position: absolute;
-  inset: 6px;
-  border-radius: 8px;
-  background: #000;
-  opacity: 0;
-  transition: opacity 900ms ease;
-}
-#responsive .laptop .screen .shot.active{ opacity: 1; }
-#responsive .laptop .screen .shot img{
-  width: 100%; height: 100%;
-  object-fit: contain;        /* show full screenshot without cropping */
-  display: block;
-}
-
-/* (Optional) If any legacy direct <img> still exists inside .screen, kill it */
-#responsive .laptop .screen > img{ display: none !important; }
-/* --- Fancy hero background: Aurora --- */
-:root{
-  /* tweak colors here */
-  --aurora-a: rgba(110,168,254,.35); /* uses your --c-542 vibe */
-  --aurora-b: rgba(159,178,217,.28); /* uses your --c-544 vibe */
-  --aurora-c: rgba(255,255,255,.12);
-  --hero-base-top: rgba(11,18,32,.96);  /* dark base for contrast */
-  --hero-base-bot: rgba(17,26,46,.92);
-}
-
-:root{ --nav-h: 64px; } /* will be updated by JS below */
-
-/* Make hero fill visible viewport */
+/* =========================
+   HERO (with aurora bg)
+========================= */
 .hero{
-  box-sizing: border-box;
-  min-height: calc(100vh - var(--nav-h));   /* fallback */
-  padding: 2.5rem 0 5rem;                   /* keep your padding */
+  margin-top: 55px;
   position: relative;
   isolation: isolate;
   overflow: clip;
+  box-sizing: border-box;
+  min-height: calc(100vh - var(--nav-h));
+  padding: 2.5rem 0 3.5rem;
 }
-
-/* Use modern dynamic viewport on capable browsers */
 @supports (height: 100dvh){
   .hero{ min-height: calc(100dvh - var(--nav-h)); }
 }
-
-/* Smooth anchor jumps so content doesn't hide under nav */
-html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
-
-/* 2) Dark base background (furthest back) */
-/* hero stays as-is: position:relative; isolation:isolate; overflow:clip; ... */
 
 /* base underlay */
 .hero::after{
@@ -455,16 +101,13 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
   background: linear-gradient(180deg, var(--hero-base-top), var(--hero-base-bot));
 }
 
-/* AURORA layer (no extra z-index on content needed) */
+/* aurora layer */
 .hero::before{
   content:"";
   position:absolute; left:50%; top:-12%;
   width:120vw; height:120%;
   z-index:-1; pointer-events:none;
   filter: blur(18px) saturate(115%); opacity:.9;
-  will-change: transform;
-
-  /* static gradients */
   background:
     radial-gradient(60% 80% at 12% 20%, var(--aurora-a), transparent 62%),
     radial-gradient(70% 60% at 85% 25%, var(--aurora-b), transparent 62%),
@@ -473,52 +116,64 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
       rgba(110,168,254,.18), rgba(255,255,255,0) 25%,
       rgba(159,178,217,.18) 50%, rgba(255,255,255,0) 75%,
       rgba(110,168,254,.18));
-
-  /* compose a single transform from custom props */
-  transform: translate3d(calc(-50% + var(--sx,0px)), var(--sy,0px), 0)
-             rotate(var(--r,0deg))
-             scale(var(--sc,1.04));
-
+  transform: translate3d(-50%,0,0) scale(1.04);
   animation: auroraBreathe 48s ease-in-out infinite alternate,
              auroraSpin    96s linear infinite;
 }
-
-/* Typed custom props so they interpolate smoothly */
-@property --r  { syntax: '<angle>';  inherits: false; initial-value: 0deg; }
-@property --sc { syntax: '<number>'; inherits: false; initial-value: 1.04; }
-@property --sx { syntax: '<length>'; inherits: false; initial-value: 0px; }
-@property --sy { syntax: '<length>'; inherits: false; initial-value: 0px; }
-
-/* Only changing custom props now — no transform clash */
-@keyframes auroraSpin { to { --r: 360deg; } }
-
+@keyframes auroraSpin { to { transform: translate3d(-50%,0,0) rotate(360deg) scale(1.04); } }
 @keyframes auroraBreathe{
-  0%   { --sc:1.02; --sx:  0px; --sy:  0px; }
-  50%  { --sc:1.07; --sx:  6px; --sy: -3px; }
-  100% { --sc:1.04; --sx: -3px; --sy:  3px; }
+  0%   { transform: translate3d(-50%,0,0) rotate(0deg)  scale(1.02); }
+  50%  { transform: translate3d(calc(-50% + 6px),-3px,0) rotate(180deg) scale(1.07); }
+  100% { transform: translate3d(calc(-50% - 3px), 3px,0) rotate(360deg) scale(1.04); }
 }
-
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   .hero::before{ animation:none; }
 }
 
-
-/* Animations: transform only (GPU-friendly) */
-@keyframes auroraTilt{
-  0%   { transform: translate3d(-50%,0,0) rotate(-2deg) scale(1.02); }
-  50%  { transform: translate3d(-50%,0,0) rotate( 3deg) scale(1.07); }
-  100% { transform: translate3d(-50%,0,0) rotate(-1deg) scale(1.04); }
-}
-@keyframes auroraSpin{
-  to { transform: translate3d(-50%,0,0) rotate(360deg) scale(1.06); }
+/* hero bits */
+.hero h1{ letter-spacing:.2px; }
+.hero-mark{
+  text-decoration:underline;
+  text-decoration-color:var(--c-542);
+  text-underline-offset:.25em;
+  text-decoration-thickness:3px;
 }
 
-/* Accessibility */
-@media (prefers-reduced-motion: reduce){
-  .hero::before{ animation:none; }
-}
-/* About – layered photo stack + slideshow */
+/* =========================
+   UTILITIES / CARDS / STATS
+========================= */
+.device{ aspect-ratio:16/10; border-radius:1rem; border:1px solid var(--border); background:rgba(255,255,255,.04); }
+.feature-icon{ width:44px; height:44px; display:grid; place-items:center; border-radius:.75rem; background:rgba(255,255,255,.08); border:1px solid var(--border); }
+.card-lift{ transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+.card-lift:hover{ transform:translateY(-4px); box-shadow:0 12px 32px rgba(0,0,0,.28); border-color:rgba(255,255,255,.22) !important; }
+
+.stat{ border-right:1px dashed var(--border); }
+.stat:last-child{ border-right:none; }
+
+/* =========================
+   ACCORDION (dark polish)
+========================= */
+.accordion-button{ background:transparent !important; color:var(--ink) !important; box-shadow:none !important; }
+.accordion-button:not(.collapsed){ background:rgba(255,255,255,.06) !important; color:var(--ink) !important; }
+.accordion-item{ background:transparent; border-color:var(--border); }
+.accordion-body{ color:var(--ink-dim); }
+.accordion-button::after{ filter: invert(1) opacity(.8); }
+
+/* =========================
+   ABOUT
+========================= */
+#about{ background: linear-gradient(180deg, var(--hero-base-top), var(--hero-base-bot)); }
+#about .container{ display: flow-root; }
+#about .lede{ color:var(--ink-dim); max-width: 52ch; }
+
+/* compact bullet list */
+#about .about-points{ margin:1rem 0 0; padding:0; list-style:none; }
+#about .about-points li{ display:flex; gap:.65rem; align-items:flex-start; margin-bottom:.65rem; }
+#about .about-points i{ color: var(--c-542); margin-top:.2rem; font-size:1rem; flex:0 0 auto; }
+#about .about-points strong{ display:block; }
+#about .about-points .small{ color: var(--ink-dim); }
+
+/* layered photo stack + mini slideshow */
 .photo-stack{ position:relative; height:440px; }
 .photo-stack .photo{
   position:absolute; border-radius:1rem; overflow:hidden;
@@ -543,12 +198,9 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
   }
 }
 
-/* slideshow inside the main (p1) card */
+/* slideshow inside main card */
 .photo-stack .p1{ position:absolute; }
-.photo-stack .p1 .slide{
-  position:absolute; inset:0;
-  opacity:0; transition:opacity 700ms ease;
-}
+.photo-stack .p1 .slide{ position:absolute; inset:0; opacity:0; transition:opacity 700ms ease; }
 .photo-stack .p1 .slide.active{ opacity:1; }
 
 /* responsive */
@@ -561,52 +213,49 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
 @media (max-width: 576px){
   .photo-stack{ height:280px; }
   .photo-stack .p1{ left:8%; right:8%; }
-  .photo-stack .p2, .photo-stack .p3{ display:none; } /* keep it tidy on phones */
+  .photo-stack .p2, .photo-stack .p3{ display:none; }
 }
-
-/* Respect reduced motion: keep a single image */
 @media (prefers-reduced-motion: reduce){
   .photo-stack .p1 .slide{ transition:none; }
 }
-/* About: give left/right breathing room and tighten the card */
 
-#about .glass-xl .feature-icon{ width:40px; height:40px; } /* slightly smaller */
-#about .glass-xl p,
-#about .glass-xl .text-white-50.small{ font-size: .95rem; } /* shorter lines */
-
-
-/* Eyebrow usable anywhere (not just in .walkthrough) */
+/* =========================
+   EYEBROW (reused)
+========================= */
 .step-eyebrow{
   display:inline-block; font-size:.8rem; letter-spacing:.06em;
   color:var(--ink-dim); text-transform:uppercase;
   border:1px solid var(--border); padding:.25rem .9rem; border-radius:999px;
 }
 
-/* Shorter lede line length */
-#about .lede{ color:var(--ink-dim); max-width: 52ch; }
+/* =========================
+   WALKTHROUGH
+========================= */
+#walkthrough{ background-color: var(--nav2); }
 
-/* Compact, iconed bullet list */
-#about .about-points{ margin: 1rem 0 0; padding: 0; list-style: none; }
-#about .about-points li{
-  display:flex; gap:.65rem; align-items:flex-start; margin-bottom:.65rem;
+/* phone frame */
+.phone{
+  position: relative; width: 100%; aspect-ratio: 9 / 19.5;
+  border-radius: 2rem; border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow: 0 12px 28px rgba(0,0,0,.28) inset, 0 10px 28px rgba(0,0,0,.22);
+  overflow: hidden;
 }
-#about .about-points i{
-  color: var(--c-542); margin-top:.2rem; font-size:1rem; flex: 0 0 auto;
+.phone::before{
+  content:""; position:absolute; top:.35rem; left:50%; transform:translateX(-50%);
+  width:40%; height:.55rem; border-radius:0 0 .6rem .6rem;
+  background:rgba(0,0,0,.45);
+  filter: blur(.2px);
 }
-#about .about-points strong{ display:block; }
-#about .about-points .small{ color: var(--ink-dim); }
-/* 1) Give About its own background so you never see the body color */
-#about{
-  background: linear-gradient(180deg, var(--hero-base-top), var(--hero-base-bot));
-}
+.phone .screen{ position:absolute; inset:.55rem; border-radius:.9rem; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:#000; }
+.phone .screen img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-/* 2) Stop margin-collapsing from the first child inside #about */
-#about .container{ display: flow-root; }
+/* compact phone widths by breakpoint */
+.walkthrough .phone{ width: 200px; margin-inline:auto; }
+@media (min-width: 768px){ .walkthrough .phone{ width: 220px; } }
+@media (min-width: 992px){ .walkthrough .phone{ width: 240px; } }
 
-/* Optional: tighten the seam a bit more */
-.hero{ padding-bottom: 3.5rem; } /* was 5rem */
-#about h2{ margin-top: .25rem; } /* trims default heading top margin */
-/* Walkthrough v2 — modern step cards */
+/* step cards */
 .walkthrough .step-card{
   position: relative;
   background: linear-gradient(180deg, var(--glass1), var(--glass2));
@@ -621,42 +270,129 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
   box-shadow: 0 16px 42px rgba(0,0,0,.28);
   border-color: rgba(255,255,255,.22);
 }
-
-/* slim gradient accent on the left */
-.walkthrough .step-card .accent{
-  position:absolute; inset:0 auto 0 0; width:3px;
-  background: linear-gradient(180deg, var(--c-542), var(--c-544));
-  opacity:.9; border-radius:1rem 0 0 1rem;
-}
-
-/* header */
-.walkthrough .step-head{
-  display:flex; align-items:center; gap:.6rem; margin:.35rem 0 .5rem;
-}
-.walkthrough .step-num{
-  width:36px; height:36px; border-radius:999px;
-  display:grid; place-items:center; font-weight:600;
-  background: rgba(255,255,255,.08);
-  border:1px solid var(--border);
-}
-.walkthrough .step-title{
-  margin:0; font-size:1.05rem; letter-spacing:.2px;
-}
-
-/* features list */
+.walkthrough .step-card .accent{ position:absolute; inset:0 auto 0 0; width:3px; background: linear-gradient(180deg, var(--c-542), var(--c-544)); opacity:.9; border-radius:1rem 0 0 1rem; }
+.walkthrough .step-head{ display:flex; align-items:center; gap:.6rem; margin:.35rem 0 .5rem; }
+.walkthrough .step-num{ width:36px; height:36px; border-radius:999px; display:grid; place-items:center; font-weight:600; background: rgba(255,255,255,.08); border:1px solid var(--border); }
+.walkthrough .step-title{ margin:0; font-size:1.05rem; letter-spacing:.2px; }
 .walkthrough .feature-list{ list-style:none; margin:.6rem 0 0; padding:0; display:grid; gap:.55rem; }
 .walkthrough .feature-list li{ display:flex; gap:.6rem; align-items:flex-start; color:var(--ink-dim); }
-.walkthrough .feature-list .icon{
-  width:24px; height:24px; border-radius:.6rem;
-  display:grid; place-items:center; flex:0 0 auto;
-  background: rgba(255,255,255,.08); border:1px solid var(--border);
-  font-size:.9rem; line-height:0;
-}
+.walkthrough .feature-list .icon{ width:24px; height:24px; border-radius:.6rem; display:grid; place-items:center; flex:0 0 auto; background: rgba(255,255,255,.08); border:1px solid var(--border); font-size:.9rem; line-height:0; }
 .walkthrough .feature-list .text{ line-height:1.35; }
+@media (max-width: 576px){ .walkthrough .step-card{ padding: .95rem; } }
 
-/* spacing tweak on small screens */
-@media (max-width: 576px){
-  .walkthrough .step-card{ padding: .95rem; }
+/* =========================
+   RESPONSIVE (Laptop slideshow)
+========================= */
+#responsive{ background-color: var(--nav2); }
+#responsive .laptop{
+  position:relative; aspect-ratio:16/10; border-radius:14px; border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow:0 10px 26px rgba(0,0,0,.24) inset, 0 10px 28px rgba(0,0,0,.22); 
+  overflow:hidden; 
+  max-width:720px; 
+  margin-inline:auto;
+}
+#responsive .laptop .screen{
+  position:absolute; inset:.8rem .8rem 1.6rem .8rem;
+  border-radius:10px; overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+  background:#000;
+  display:block;
+}
+#responsive .laptop .screen .shot{
+  position:absolute; inset:6px; border-radius:8px; background:#000;
+  opacity:0; transition:opacity 900ms ease;
+}
+#responsive .laptop .screen .shot.active{ opacity:1; }
+#responsive .laptop .screen .shot img{
+  width:100%; height:100%; object-fit:contain; display:block;
+}
+
+/* =========================
+   DELI PHOTOS (Chadwick gallery)
+   - equal heights per row
+========================= */
+#deli-photos{ 
+  --row1-h-lg: 260px;   /* desktop: first row (t1,t2) */
+  --row2-h-lg: 200px;   /* desktop: second row (t3,t4,t5) */
+  --row-h-sm: 180px;    /* mobile/tablet: all tiles */
+  background-color: var(--nav2);
+}
+#deli-photos .lede{ color: var(--ink-dim); max-width: 60ch; }
+#deli-photos .grid{ display:grid; gap:.8rem; }
+#deli-photos .tile{
+  position:relative; border:1px solid var(--border); border-radius:1rem; overflow:hidden;
+  background:rgba(255,255,255,.04);
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+#deli-photos .tile:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 42px rgba(0,0,0,.28);
+  border-color: rgba(255,255,255,.22);
+}
+#deli-photos .tile img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .35s ease; }
+#deli-photos .tile:hover img{ transform: scale(1.03); }
+
+/* mobile/tablet */
+@media (max-width: 991.98px){
+  #deli-photos .grid{ grid-template-columns: repeat(2, 1fr); }
+  #deli-photos .tile{ height: var(--row-h-sm); }
+}
+
+/* desktop */
+@media (min-width: 992px){
+  #deli-photos .grid{ grid-template-columns: repeat(12, 1fr); }
+  /* row 1: two equal tiles */
+  #deli-photos .t1, 
+  #deli-photos .t2{ grid-column: span 6; height: var(--row1-h-lg); }
+  /* row 2: three equal tiles */
+  #deli-photos .t3, 
+  #deli-photos .t4, 
+  #deli-photos .t5{ grid-column: span 4; height: var(--row2-h-lg); }
+}
+
+/* modal image (if you add the modal markup) */
+#deli-photos .modal-content{ background: transparent; border: 0; box-shadow: none; }
+#deli-photos .modal-body img{
+  width:100%; height:auto; border:1px solid var(--border); border-radius:1rem; display:block; margin:auto;
+}
+
+/* =========================
+   SCHOOLS (logos)
+========================= */
+#schools{ background-color: var(--nav2); }
+#schools .logo{
+  width: 100%; height: 58px;
+  object-fit: contain;
+  filter: grayscale(35%) opacity(.9);
+  transition: filter .2s ease, transform .2s ease;
+}
+#schools a:hover .logo{ filter: none; transform: translateY(-2px); }
+#schools .logos-note{ color: var(--ink-dim); }
+
+/* larger variants used in your layout */
+#schools .logo.big{ height: 250px; }
+#schools .logo.verybig{ height: 400px; }
+@media (min-width: 992px){
+  #schools .logo.big{ height: 180px; }
+  #schools .logo.verybig{ height: 280px; }
+}
+
+/* =========================
+   FOOTER
+========================= */
+.site-footer{
+  background:linear-gradient(180deg, rgba(11,18,32,.7), rgba(17,26,46,.55));
+  backdrop-filter:saturate(120%) blur(8px);
+}
+.footer-mini{ color:var(--ink-dim); }
+
+/* =========================
+   SMALL TWEAKS
+========================= */
+@media (max-width:576px){
+  .stat{ border-right:none; border-bottom:1px dashed var(--border); padding-bottom:.5rem; margin-bottom:.5rem; }
+  .stat:last-child{ border-bottom:0; }
 }
 
   </style>
@@ -707,11 +443,6 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
           <div class="d-flex gap-2 flex-wrap">
             <a href="https://deli-express.vercel.app/" class="btn btn-brand"><i class="bi bi-bag-check me-1"></i>Start Order</a>
           </div>
-  <!--         <div class="d-flex gap-4 mt-4 small text-white-50">
-            <div><i class="bi bi-shield-check me-1"></i>School login ready</div>
-            <div><i class="bi bi-cash-coin me-1"></i>Rewards & surveys</div>
-            <div><i class="bi bi-phone me-1"></i>PWA friendly</div>
-          </div> -->
         </div>
         <div class="col-12 col-lg-6 px-3" data-aos="fade-up" data-aos-delay="100">
           <div class="glass-xl p-3 p-md-4 card-lift">
@@ -1090,29 +821,58 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
   </svg>
 </div>
 
+<!-- DELI LOOKS: Chadwick Photo Gallery -->
+<section id="deli-photos" class="py-5" style="background-color: #111a2e;">
+  <div class="container">
+    <div class="row g-4 align-items-start">
+      <div class="col-12 col-lg-4" data-aos="fade-right">
+        <span class="step-eyebrow">Chadwick Campus</span>
+        <h2 class="h4 mt-2 mb-2">Inside the Deli</h2>
+        <p class="lede mb-0">
+          A quick look at the deli at Chadwick—fresh stations, grab-and-go, and
+          express pickup lanes designed to keep lines moving.
+        </p>
+      </div>
+
+      <div class="col-12 col-lg-8" data-aos="fade-left">
+        <div class="grid">
+          <!-- Replace the src paths with your 5 store images -->
+          <a class="tile t1" data-bs-toggle="modal" data-bs-target="#deliPhotoModal" data-src="static/images/deli1.jpg">
+            <img src="static/images/about3.jpg" alt="Chadwick deli — wide counter view" loading="lazy">
+          </a>
+          <a class="tile t2" data-bs-toggle="modal" data-bs-target="#deliPhotoModal" data-src="static/images/deli2.jpg">
+            <img src="static/images/about6.jpg" alt="Fresh options and prep area" loading="lazy">
+          </a>
+          <a class="tile t3" data-bs-toggle="modal" data-bs-target="#deliPhotoModal" data-src="static/images/deli3.jpg">
+            <img src="static/images/about4.jpg" alt="Grab-and-go fridge" loading="lazy">
+          </a>
+          <a class="tile t4" data-bs-toggle="modal" data-bs-target="#deliPhotoModal" data-src="static/images/deli4.jpg">
+            <img src="static/images/about1.jpg" alt="Hot station and sides" loading="lazy">
+          </a>
+          <a class="tile t5" data-bs-toggle="modal" data-bs-target="#deliPhotoModal" data-src="static/images/deli5.jpg">
+            <img src="static/images/about5.jpg" alt="Barista / drinks area" loading="lazy">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</section>
+
+<!-- Optional wave divider to match your style -->
+<div class="section-divider-wave" aria-hidden="true">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <rect width="100%" height="120" fill="#111a2e"></rect>
+    <path d="M0,44 C180,80 360,80 540,56 C720,32 900,16 1080,44 C1260,72 1350,72 1440,52 L1440,120 L0,120 Z" fill="rgba(255,255,255,.08)"></path>
+    <path d="M0,52 C160,88 320,88 480,64 C680,32 880,24 1080,52 C1240,76 1340,72 1440,60 L1440,120 L0,120 Z" fill="var(--hero-base-bot)"></path>
+  </svg>
+</div>
+
+
 
 <!-- SCHOOLS: Text left, logos right (no cards) -->
 <section id="schools" class="py-5"style="background-color: #111a2e;">
-  <style>
-    /* Local-only styles for this section */
-    #schools .logo{
-      width: 100%;
-      height: 58px;                 /* uniform row height */
-      object-fit: contain;          /* keep logo proportions */
-      filter: grayscale(35%) opacity(.9);
-      transition: filter .2s ease, transform .2s ease;
-    }
-    #schools a:hover .logo{
-      filter: none; transform: translateY(-2px);
-    }
-    #schools .logos-note{ color: var(--ink-dim); }
-      #schools .logo.big{ height: 250px; }     
-      #schools .logo.verybig{ height: 400px; }             /* larger than 58px */
-  @media (min-width: 992px){
-    #schools .logo.big{ height: 180px; }
-    #schools .logo.verybig{ height: 280px; }             /* a touch larger on desktop */
-  }
-  </style>
 
   <div class="container">
     <div class="row g-4 align-items-center">
