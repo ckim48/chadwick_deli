@@ -683,9 +683,9 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
           <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
             <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
             <li class="nav-item"><a class="nav-link" href="#walkthrough">Features</a></li>
-            <li class="nav-item d-lg-none my-2"><a class="btn btn-brand w-100" href="/order/start"><i class="bi bi-bag-check me-1"></i> Start Order</a></li>
+            <li class="nav-item d-lg-none my-2"><a class="btn btn-brand w-100" href="https://deli-express.vercel.app/"><i class="bi bi-bag-check me-1"></i> Start Order</a></li>
           </ul>
-          <a class="btn btn-brand ms-lg-3 d-none d-lg-inline-flex" href="/order/start"><i class="bi bi-bag-check me-1"></i> Start Order</a>
+          <a class="btn btn-brand ms-lg-3 d-none d-lg-inline-flex" href="https://deli-express.vercel.app/"><i class="bi bi-bag-check me-1"></i> Start Order</a>
         </div>
       </div>
     </div>
@@ -705,7 +705,7 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
           <p class="lead text-white-50 mb-4" style="font-size: 1.1rem !important;">Skip the line and get healthier options without the wait. Designed for Chadwick International School.</p>
           <!-- FEWER BUTTONS: primary + one secondary -->
           <div class="d-flex gap-2 flex-wrap">
-            <a href="/order/start" class="btn btn-brand"><i class="bi bi-bag-check me-1"></i>Start Order</a>
+            <a href="https://deli-express.vercel.app/" class="btn btn-brand"><i class="bi bi-bag-check me-1"></i>Start Order</a>
           </div>
   <!--         <div class="d-flex gap-4 mt-4 small text-white-50">
             <div><i class="bi bi-shield-check me-1"></i>School login ready</div>
@@ -786,7 +786,7 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
   </ul>
 
   <div class="d-flex gap-2 mt-4">
-    <a href="/order/start" class="btn btn-brand"><i class="bi bi-bag-check me-1"></i>Start Order</a>
+    <a href="https://deli-express.vercel.app/" class="btn btn-brand"><i class="bi bi-bag-check me-1"></i>Start Order</a>
     <a href="#walkthrough" class="btn btn-ghost">See how it works</a>
   </div>
 </div>
@@ -977,7 +977,7 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
       <li><span class="icon"><i class="bi bi-clock-history"></i></span><span class="text">Track history & favorites</span></li>
     </ul>
     <div class="mt-3">
-      <a href="/order/start" class="btn btn-brand"><i class="bi bi-bag-check me-1"></i>Start Order</a>
+      <a href="https://deli-express.vercel.app/" class="btn btn-brand"><i class="bi bi-bag-check me-1"></i>Start Order</a>
     </div>
   </div>
 </div>
@@ -1091,7 +1091,100 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
 </div>
 
 
-<div class="section-divider-wave" aria-hidden="true">
+<!-- SCHOOLS: Text left, logos right (no cards) -->
+<section id="schools" class="py-5"style="background-color: #111a2e;">
+  <style>
+    /* Local-only styles for this section */
+    #schools .logo{
+      width: 100%;
+      height: 58px;                 /* uniform row height */
+      object-fit: contain;          /* keep logo proportions */
+      filter: grayscale(35%) opacity(.9);
+      transition: filter .2s ease, transform .2s ease;
+    }
+    #schools a:hover .logo{
+      filter: none; transform: translateY(-2px);
+    }
+    #schools .logos-note{ color: var(--ink-dim); }
+      #schools .logo.big{ height: 250px; }     
+      #schools .logo.verybig{ height: 400px; }             /* larger than 58px */
+  @media (min-width: 992px){
+    #schools .logo.big{ height: 180px; }
+    #schools .logo.verybig{ height: 280px; }             /* a touch larger on desktop */
+  }
+  </style>
+
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <!-- LEFT: text -->
+      <div class="col-12 col-lg-6" data-aos="fade-right">
+        <span class="step-eyebrow">Beyond Chadwick</span>
+        <h2 class="h3 mt-2">Coming to More Campuses</h2>
+        <p class="text-white-50 mb-3">
+          We’re rolling out timed pickup windows, express lanes, and nutrition tagging to more campuses in 2025–2026.
+          Bring faster queues and healthier choices to your school—without an app install.
+        </p>
+
+        <ul class="about-points mb-3">
+          <li>
+            
+            <div>
+              <strong><i class="bi bi-graph-up-arrow me-1"></i> Flatten peak lunch congestion</strong>
+              <div class="small">5-minute slots distribute demand and shorten lines.</div>
+            </div>
+          </li>
+          <li>
+            
+            <div>
+              <strong><i class="bi bi-shield-lock me-1"></i> School SSO ready</strong>
+              <div class="small">Secure login with existing accounts (no new passwords).</div>
+            </div>
+          </li>
+          <li>
+            
+            <div>
+              <strong><i class="bi bi-heart-pulse me-1"></i> Nutrition & allergen visibility</strong>
+              <div class="small">Better choices without slowing the queue.</div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="/contact" class="btn btn-brand"><i class="bi bi-envelope me-1"></i>Request a pilot</a>
+          <a href="https://deli-express.vercel.app/" class="btn btn-ghost">View live demo</a>
+        </div>
+
+        <small class="d-block mt-3 logos-note">
+          Interested in partnering? <a class="link-light text-decoration-underline" href="/contact">Get in touch</a>.
+        </small>
+      </div>
+
+      <!-- RIGHT: logo images grid (no cards) -->
+<!-- RIGHT: logos — two on top, one big centered below -->
+<div class="col-12 col-lg-6" data-aos="fade-left" data-aos-delay="75">
+  <div class="container px-0">
+    <div class="row g-3">
+      <!-- Top row: two logos -->
+      <div class="col-6 d-flex align-items-center justify-content-center">
+        <a href="#"><img class="logo big" src="static/images/logos/logo1.png" alt="Partner School 1"></a>
+      </div>
+      <div class="col-6 d-flex align-items-center justify-content-center">
+        <a href="#"><img class="logo big" src="static/images/logos/logo2.webp" alt="Partner School 2"></a>
+      </div>
+
+      <!-- Bottom row: one bigger logo, centered under the two -->
+      <div class="col-10 col-md-8 mx-auto d-flex align-items-center justify-content-center">
+        <a href="#"><img class="logo big" src="static/images/logos/logo3.webp" alt="Partner School 3"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</section>
+
+ <div class="section-divider-wave" aria-hidden="true">
   <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
     <!-- top area color -->
     <rect width="100%" height="120" fill="#111a2e"></rect>
@@ -1105,7 +1198,6 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
           fill="var(--hero-base-bot)"></path>
   </svg>
 </div>
-
 
 
 
@@ -1153,7 +1245,7 @@ html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
             <p class="text-white-50 mb-0">Jump in now and pick up at your perfect time. No app install required.</p>
           </div>
           <div class="d-flex gap-2 mt-3">
-            <a href="/order/start" class="btn btn-brand w-100">Start Order</a>
+            <a href="https://deli-express.vercel.app/" class="btn btn-brand w-100">Start Order</a>
           </div>
         </div>
       </div>
