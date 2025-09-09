@@ -514,6 +514,16 @@ body{
 @media (prefers-reduced-motion: reduce){
   .hero.alt-hero.aurora{ animation: none; }
 }
+#responsive .laptop .screen .shot{
+  opacity: 0;
+  z-index: 0;
+  will-change: opacity;
+  transition: opacity 800ms ease; /* smooth fade */
+}
+#responsive .laptop .screen .shot.active{
+  opacity: 1;
+  z-index: 1; /* active frame sits on top while fading */
+}
 
   </style>
 </head>
@@ -1328,6 +1338,58 @@ window.addEventListener('load', () => {
 })();
 </script>
 
+<script>
+(() => {
+  const section = document.querySelector('#responsive');
+  const screen  = section?.querySelector('.screen');
+  const shots   = screen ? Array.from(screen.querySelectorAll('.shot')) : [];
+
+  if (!section || shots.length <= 1) return;
+
+  // Preload images to avoid flashes
+  shots.forEach(s => {
+    const img = s.querySelector('img');
+    if (img && !img.complete) { const p = new Image(); p.src = img.src; }
+  });
+
+  const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let idx = shots.findIndex(s => s.classList.contains('active'));
+  if (idx < 0) { shots[0].classList.add('active'); idx = 0; }
+
+  const INTERVAL_MS = 2900;
+  let timer;
+
+  function step(){
+    shots[idx].classList.remove('active');
+    idx = (idx + 1) % shots.length;
+    shots[idx].classList.add('active');
+  }
+  function start(){ if (!prefersReduced && !timer) timer = setInterval(step, INTERVAL_MS); }
+  function stop(){ clearInterval(timer); timer = null; }
+
+  // Pause when tab hidden
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+
+  // Pause when section out of view
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => (e.intersectionRatio < 0.2 ? stop() : start()));
+    }, { threshold: [0, 0.2] });
+    io.observe(section);
+  } else {
+    start();
+  }
+
+  // Pause on hover (desktop)
+  const frame = section.querySelector('.laptop');
+  if (frame){
+    frame.addEventListener('mouseenter', stop);
+    frame.addEventListener('mouseleave', start);
+  }
+
+  start();
+})();
+</script>
 
 </body>
 </html>
