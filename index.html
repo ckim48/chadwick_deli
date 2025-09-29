@@ -435,6 +435,12 @@ body{
   filter: grayscale(35%) opacity(.9);
   transition: filter .2s ease, transform .2s ease;
 }
+#schools .logo2{
+  width: 100%; height: 75px;
+  object-fit: contain;
+  filter: grayscale(35%) opacity(.9);
+  transition: filter .2s ease, transform .2s ease;
+}
 #schools a:hover .logo{ filter: none; transform: translateY(-2px); }
 #schools .logos-note{ color: var(--ink-dim); }
 
@@ -523,6 +529,26 @@ body{
 #responsive .laptop .screen .shot.active{
   opacity: 1;
   z-index: 1; /* active frame sits on top while fading */
+}
+/* School logos */
+.school-logo-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: transform 0.3s ease, background 0.3s ease;
+  text-align: center;
+}
+.school-logo-box:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+}
+.school-logo-box img.logo {
+  max-height: 70px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+.school-logo-box:hover img.logo {
+  transform: scale(1.05);
 }
 
   </style>
@@ -1048,80 +1074,103 @@ body{
 </div>
 
 
-
-<!-- SCHOOLS: Text left, logos right (no cards) -->
-<section id="schools" class="py-5"style="background-color: #111a2e;">
-
+<!-- SCHOOLS: Text left, logos right -->
+<section id="schools" class="py-5" style="background-color: #111a2e;">
   <div class="container">
     <div class="row g-4 align-items-center">
+      
       <!-- LEFT: text -->
-      <div class="col-12 col-lg-6" data-aos="fade-right">
-        <span class="step-eyebrow">Beyond Chadwick</span>
+      <div class="col-12 col-lg-5 text-white" data-aos="fade-right">
+        <span class="step-eyebrow text-uppercase text-info fw-bold">Beyond Chadwick</span>
         <h2 class="h3 mt-2">Coming to More Campuses</h2>
-        <p class="text-white-50 mb-3">
-          We’re rolling out timed pickup windows, express lanes, and nutrition tagging to more campuses in 2025–2026.
-          Bring faster queues and healthier choices to your school—without an app install.
-        </p>
+<p class="text-white-50 mb-3">
+  <strong>Chadwick International School</strong> is our first school to launch with timed pickup windows, express lanes, 
+  and nutrition tagging.  
+  In 2025–2026, we’re exploring expansion to additional schools, bringing faster queues and healthier choices —
+  all without requiring an app install.
+</p>
 
-        <ul class="about-points mb-3">
+        <ul class="about-points mb-4">
           <li class="mb-3">
-            
-            <div>
-              <strong><i class="bi bi-graph-up-arrow me-1"></i> Flatten peak lunch congestion</strong>
-              <div class="small">5-minute slots distribute demand and shorten lines.</div>
-            </div>
+            <strong><i class="bi bi-graph-up-arrow me-1"></i> Flatten peak lunch congestion</strong>
+            <div class="small text-white-50">5-minute slots distribute demand and shorten lines.</div>
           </li>
           <li class="mb-3">
-            
-            <div>
-              <strong><i class="bi bi-shield-lock me-1"></i> School SSO ready</strong>
-              <div class="small">Secure login with existing accounts (no new passwords).</div>
-            </div>
+            <strong><i class="bi bi-shield-lock me-1"></i> School SSO ready</strong>
+            <div class="small text-white-50">Secure login with existing accounts (no new passwords).</div>
           </li>
           <li>
-            
-            <div>
-              <strong><i class="bi bi-heart-pulse me-1"></i> Nutrition & allergen visibility</strong>
-              <div class="small">Better choices without slowing the queue.</div>
-            </div>
+            <strong><i class="bi bi-heart-pulse me-1"></i> Nutrition & allergen visibility</strong>
+            <div class="small text-white-50">Better choices without slowing the queue.</div>
           </li>
         </ul>
 
         <div class="d-flex gap-2 flex-wrap">
-            <a
-    class="btn btn-brand"
-    href="mailto:j6kim2026@chadwickschool.org"
-  ><i class="bi bi-envelope me-1"></i>Request a pilot</a>
+          <a class="btn btn-brand" href="mailto:j6kim2026@chadwickschool.org">
+            <i class="bi bi-envelope me-1"></i>Request a pilot
+          </a>
           <a href="https://deli-express.vercel.app/" class="btn btn-ghost">View live demo</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: grid of school logos -->
+      <div class="col-12 col-lg-7 text-center" data-aos="fade-left" data-aos-delay="75">
+        <h4 class="text-white mb-4">Schools in Discussion</h4>
+
+        <div class="row g-3">
+          <!-- Logos -->
+          <div class="col-6 col-md-4">
+            <div class="school-logo-box p-2">
+              <img src="static/images/logos/sas.png" class="img-fluid logo" alt="Chadwick International">
+              <p class="mt-2 small text-white-50">Singapore American School</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <div class="school-logo-box p-2">
+              <img src="static/images/logos/logo2.webp" class="img-fluid logo" alt="Seoul Academy">
+              <p class="mt-2 small text-white-50">Seoul Foreign School</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <div class="school-logo-box p-2">
+              <img src="static/images/logos/logo3.webp" class="img-fluid logo" alt="Global Prep">
+              <p class="mt-2 small text-white-50">Fulton Science Academy</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <div class="school-logo-box p-2">
+              <img src="static/images/logos/logo4.jpeg" class="img-fluid logo" alt="Maple Leaf School">
+              <p class="mt-2 small text-white-50">KIS Jeju</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <div class="school-logo-box p-2">
+              <img src="static/images/logos/logo5.webp" class="img-fluid logo" alt="Bright Future Academy">
+              <p class="mt-2 small text-white-50">Seoul International School</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <div class="school-logo-box p-2">
+              <img src="static/images/logos/ssi.png" class="img-fluid logo2" alt="Evergreen International">
+              <p class="mt-2 small text-white-50">Seoul Scholars International</p>
+            </div>
+          </div>
+
+          <!-- "…and more" tile (no button) -->
+          <div class="col-12">
+            <div class="more-tile">
+              <span class="and-more-pill">…and more schools joining the 2025–2026 rollout</span>
+            </div>
+          </div>
         </div>
 
 
       </div>
 
-      <!-- RIGHT: logo images grid (no cards) -->
-<!-- RIGHT: logos — two on top, one big centered below -->
-<div class="col-12 col-lg-6" data-aos="fade-left" data-aos-delay="75">
-  <div class="container px-0">
-    <div class="row g-3">
-      <!-- Top row: two logos -->
-      <div class="col-6 d-flex align-items-center justify-content-center">
-        <a href="#"><img class="logo big" src="static/images/logos/logo1.png" alt="Partner School 1"></a>
-      </div>
-      <div class="col-6 d-flex align-items-center justify-content-center">
-        <a href="#"><img class="logo big" src="static/images/logos/logo2.webp" alt="Partner School 2"></a>
-      </div>
-
-      <!-- Bottom row: one bigger logo, centered under the two -->
-      <div class="col-6 col-md-8 mx-auto d-flex align-items-center justify-content-center">
-        <a href="#"><img class="logo big" src="static/images/logos/logo3.webp" alt="Partner School 3"></a>
-      </div>
-    </div>
-  </div>
-</div>
-
     </div>
   </div>
 </section>
+
 
  <div class="section-divider-wave" aria-hidden="true">
   <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
