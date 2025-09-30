@@ -228,6 +228,9 @@ body{
 #about .container{ display: flow-root; }
 #about .lede{ color:var(--ink-dim); max-width: 52ch; }
 
+
+
+
 /* compact bullet list */
 #about .about-points{ margin:1rem 0 0; padding:0; list-style:none; }
 #about .about-points li{ display:flex; gap:.65rem; align-items:flex-start; margin-bottom:.65rem; }
@@ -550,6 +553,39 @@ body{
 .school-logo-box:hover img.logo {
   transform: scale(1.05);
 }
+
+/* ABOUT ME */
+#about-me{ background-color: var(--nav2); }
+#about-me .avatar{
+  width: 96px; height: 96px; border-radius: 999px; object-fit: cover;
+  border:1px solid var(--border); box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+#about-me .mini-chip{
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.35rem .6rem; border-radius:.7rem;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.06); color: var(--ink-dim);
+  font-size:.82rem; letter-spacing:.1px;
+}
+#about-me .stat-card{
+  background: linear-gradient(180deg, var(--glass1), var(--glass2));
+  border: 1px solid var(--border);
+  border-radius: .9rem; padding: .9rem 1rem;
+  color:var(--ink-dim);
+}
+#about-me .stat-card .kicker{ color: var(--ink-dim); font-size:.82rem; }
+#about-me .badge-pill{
+  display:inline-block; border:1px solid var(--border); border-radius:999px;
+  padding:.35rem .7rem; font-size:.84rem; color:var(--ink-dim);
+}
+
+#about-simple .about-photo{
+  border-radius:1rem;
+  border:1px solid var(--border);
+  box-shadow:0 10px 26px rgba(0,0,0,.22);
+  display:block; width:100%; height:auto; object-fit:cover;
+}
+#about-me .lede{ color:var(--ink-dim); max-width: 52ch; }
 
   </style>
 </head>
@@ -1217,6 +1253,59 @@ body{
   </div>
 </section>
 
+
+
+
+
+<div class="section-divider-wave" aria-hidden="true">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <rect width="100%" height="120" fill="#111a2e"></rect>
+    <path d="M0,44 C180,80 360,80 540,56 C720,32 900,16 1080,44 C1260,72 1350,72 1440,52 L1440,120 L0,120 Z" fill="rgba(255,255,255,.08)"></path>
+    <path d="M0,52 C160,88 320,88 480,64 C680,32 880,24 1080,52 C1240,76 1340,72 1440,60 L1440,120 L0,120 Z" fill="var(--hero-base-bot)"></path>
+  </svg>
+</div>
+
+
+
+
+
+
+<section id="about-me" class="py-5" style="background-color:#111a2e;">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      
+      <!-- LEFT: Text content -->
+      <div class="col-12 col-lg-6" data-aos="fade-right">
+        <span class="step-eyebrow">About the Developer
+</span>
+        <h2 class="h4 mt-2 mb-3">Hi, I'm Jane Kim</h2>
+        <p class="mb-3 lede" style="max-width:60ch; text-align: justify;">
+          Hi, my name is Jane. I started this project to solve a common pain point at our school deli: long wait times that often made it impossible for students to get food during short breaks. To help students use their limited recess more efficiently, I designed a dedicated ordering app and website for the Chadwick Deli. Inspired by Starbucks’ Siren technology, the goal was to eliminate the inconvenience of long queues during busy break times.
+
+        </p>
+
+        <p class="mb-3 lede" style="max-width:60ch; text-align: justify;">
+What began as a school project grew into a fully implemented platform. Over time, I improved its features and transformed it from a prototype into a real, working system. I’ve also structured it so the model can be easily replicated at other schools or similar settings.
+
+
+        </p>
+
+        <p class="mb-3 lede" style="max-width:60ch; text-align: justify;">
+If you’re interested in collaborating or contributing to the continued improvement of this project, I’d love to connect!
+
+
+        </p>
+
+      </div>
+
+      <!-- RIGHT: Profile image -->
+      <div class="col-12 col-lg-6 text-center" data-aos="fade-left" data-aos-delay="75">
+        <img src="static/images/jane.jpeg" alt="" class="about-photo img-fluid d-block mx-auto" style="width:70%;border-radius: 15px; ">
+      </div>
+
+    </div>
+  </div>
+</section>
 
 
 
